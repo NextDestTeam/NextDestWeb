@@ -1,18 +1,19 @@
 package beans;
 
+import java.util.Date;
+
 public class Person {
-	private Long id;
+	private Integer id;
 	private String firstName;
 	private String lastName;
 	private String email;
-	private String address;
-	private Long personTypeId;
-	private Long eventId;
+	private Date age;
+	private Integer personTypeId;
 	
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getFirstName() {
@@ -33,23 +34,17 @@ public class Person {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getAddress() {
-		return address;
+	public Date getAge() {
+		return age;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setAge(Date age) {
+		this.age = age;
 	}
-	public Long getPersonTypeId() {
+	public Integer getPersonTypeId() {
 		return personTypeId;
 	}
-	public void setPersonTypeId(Long personTypeId) {
+	public void setPersonTypeId(Integer personTypeId) {
 		this.personTypeId = personTypeId;
 	}
-	public Long getEventId() {
-		return eventId;
-	}
-	public void setEventId(Long eventId) {
-		this.eventId = eventId;
-	}
-
+	
 }
