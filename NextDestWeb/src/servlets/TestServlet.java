@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -46,6 +47,13 @@ public class TestServlet extends HttpServlet {
 		
 		session = request.getSession(true);
 		session.setAttribute("persons", persons);
+		
+		try {
+			c.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		try {
 			ServletContext context = getServletContext();

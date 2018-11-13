@@ -70,7 +70,7 @@ public class PersonDao implements Dao<Person> {
 	public void save(Person t) {
 		// TODO Auto-generated method stub
 		Statement stm;
-		String query = "insert into person(first_name, last_name, email, age, person_type_id)"
+		String query = "INSERT INTO PERSON(first_name, last_name, email, age, person_type_id)"
 					 + "values((select max(id) from person), '"
 					 + t.getFirstName() + "', '"
 					 + t.getLastName() + "', '"
@@ -87,10 +87,10 @@ public class PersonDao implements Dao<Person> {
 	}
 
 	@Override
-	public void update(Person t, String[] args) {
+	public void update(Person t) {
 		// TODO Auto-generated method stub
 		Statement stm;
-		String query = "update person set("
+		String query = "UPDATE PERSON SET("
 				 + "id='" + t.getId() + "', "
 				 + "first_name='" + t.getFirstName() + "', "
 				 + "last_name='" + t.getLastName() + "', "
@@ -120,5 +120,4 @@ public class PersonDao implements Dao<Person> {
 			e.printStackTrace();
 		}		
 	}
-
 }
