@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import beans.Activity;
-import beans.Person;
 
 public class ActivityDao implements Dao<Activity>{
 	private Connection connection;
@@ -45,21 +44,22 @@ public class ActivityDao implements Dao<Activity>{
 	public List<Activity> getAll() {
 		// TODO Auto-generated method stub
 		List<Activity> activities = new ArrayList<>();
-		Activity activity = new Activity();
 		ResultSet rs;
 		String query = "SELECT * FROM ACTIVITY";
 		Statement stm;
 		try {
 			stm = this.connection.createStatement();
 			rs = stm.executeQuery(query);
-			rs.next();
-			activity.setName(rs.getString("name"));
-			activity.setLocation(rs.getString("location"));
-			activity.setDescription(rs.getString("description"));
-			activity.setPersonId(rs.getInt("person_id"));
-			activity.setShortDescription(rs.getString("short_description"));
-			activity.setPrice(rs.getInt("price"));
-			activities.add(activity);
+			while(rs.next()) {
+				Activity activity = new Activity();
+				activity.setName(rs.getString("name"));
+				activity.setLocation(rs.getString("location"));
+				activity.setDescription(rs.getString("description"));
+				activity.setPersonId(rs.getInt("person_id"));
+				activity.setShortDescription(rs.getString("short_description"));
+				activity.setPrice(rs.getInt("price"));
+				activities.add(activity);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

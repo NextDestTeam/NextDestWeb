@@ -44,21 +44,22 @@ public class PersonDao implements Dao<Person> {
 	public List<Person> getAll() {
 		// TODO Auto-generated method stub
 		List<Person> personList = new ArrayList<>();
-		Person person = new Person();
 		ResultSet rs;
 		Statement stm;
 		String query = "SELECT * FROM PERSON";
 		try {
 			stm = this.connection.createStatement();
 			rs = stm.executeQuery(query);
-			rs.next();
-			person.setAge(rs.getDate("age"));
-			person.setEmail(rs.getString("email"));
-			person.setFirstName(rs.getString("first_name"));
-			person.setId(rs.getInt("id"));
-			person.setLastName(rs.getString("last_name"));
-			person.setPersonTypeId(rs.getInt("person_type_id"));
-			personList.add(person);
+			while(rs.next()) {
+				Person person = new Person();
+				person.setAge(rs.getDate("age"));
+				person.setEmail(rs.getString("email"));
+				person.setFirstName(rs.getString("first_name"));
+				person.setId(rs.getInt("id"));
+				person.setLastName(rs.getString("last_name"));
+				person.setPersonTypeId(rs.getInt("person_type_id"));
+				personList.add(person);
+			}			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
