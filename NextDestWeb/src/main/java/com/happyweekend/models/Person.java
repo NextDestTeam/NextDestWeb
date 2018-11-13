@@ -1,4 +1,4 @@
-package beans;
+package com.happyweekend.models;
 
 import java.util.Date;
 

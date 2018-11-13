@@ -1,4 +1,4 @@
-package beans;
+package com.happyweekend.models;
 
 public class ActivityType {
 	private Integer id;

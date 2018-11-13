@@ -1,4 +1,4 @@
-package beans;
+package com.happyweekend.models;
 
 public class PersonType {
 	private Integer id;
