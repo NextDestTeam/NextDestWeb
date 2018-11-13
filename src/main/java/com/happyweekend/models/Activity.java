@@ -2,6 +2,7 @@ package com.happyweekend.models;
 
 public class Activity {
 	private Integer id;
+	private String name;
 	private String character;
 	private String shortDescription;
 	private String description;
@@ -50,6 +51,12 @@ public class Activity {
 	}
 	public void setPersonId(Integer personId) {
 		this.personId = personId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 

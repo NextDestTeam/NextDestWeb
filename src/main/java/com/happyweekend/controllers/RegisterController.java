@@ -19,6 +19,7 @@ public class RegisterController {
 	
 	@PostMapping("register")
 	public String register() {
+		return "index";
 		
 	}
 	
