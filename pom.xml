@@ -47,24 +47,11 @@
       <maven.compiler.target>1.8</maven.compiler.target>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-      <!-- used for build-tomcat and embedded profiles -->
-      <apache-tomcat.version>8.5.8</apache-tomcat.version>
-      <cargo.logging>low</cargo.logging>
-      <cargo.tomcat.ajp.port>9889</cargo.tomcat.ajp.port>
-      <cargo.rmi.port>9805</cargo.rmi.port>
-      <cargo.servlet.port>8090</cargo.servlet.port>
-      <apache-tomcat.server.port>8090</apache-tomcat.server.port>
-      <apache-tomcat.dir.name>apache-tomcat-${apache-tomcat.version}</apache-tomcat.dir.name>
-      <apache-tomcat.users.name>tomcat</apache-tomcat.users.name>
-      <apache-tomcat.users.password>tomcat</apache-tomcat.users.password>
       <postgresql-connector.version>42.2.5</postgresql-connector.version>
       
       <!-- dependencies -->
-      <springframework.version>4.2.8.RELEASE</springframework.version>
-      <springframework-security.version>3.2.5.RELEASE</springframework-security.version>
-      <hibernate.version>4.3.11.Final</hibernate.version>
-      <hibernate-commons-annotations.version>4.0.5.Final</hibernate-commons-annotations.version>
-      <hibernate-jpa.version>1.0.0.Final</hibernate-jpa.version>
+      <springframework.version>5.0.9.RELEASE</springframework.version>
+      <springframework-security.version>5.0.9.RELEASE</springframework-security.version>
       <javax.servlet.version>3.1.0</javax.servlet.version>
       <javax.servlet.jsp.version>2.3.1</javax.servlet.jsp.version>
       <org.apache.tiles>3.0.7</org.apache.tiles>
@@ -90,15 +77,15 @@
       <cargo-maven2-plugin.version>1.6.3</cargo-maven2-plugin.version>
    </properties>
    
-   <parent>
+   <!-- <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.5.RELEASE</version>
-    </parent>
+    </parent> -->
    
    <dependencies>
       <!-- Spring Framework -->
-      <!-- <dependency>
+      <dependency>
          <groupId>org.springframework</groupId>
          <artifactId>spring-web</artifactId>
          <version>${springframework.version}</version>
@@ -119,7 +106,7 @@
             </exclusion>
          </exclusions>
       </dependency>
-      Spring Security Framework
+      <!-- Spring Security Framework -->
       <dependency>
          <groupId>org.springframework.security</groupId>
          <artifactId>spring-security-core</artifactId>
@@ -140,9 +127,9 @@
          <artifactId>spring-security-taglibs</artifactId>
          <version>${springframework-security.version}</version>
       </dependency>
-       -->
+       
       <!-- Spring boot -->
-      <dependency>
+      <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -154,33 +141,8 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency>
-      <!-- hibernate, jpa and spring orm -->
-      <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-core</artifactId>
-         <version>${hibernate.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-entitymanager</artifactId>
-         <version>${hibernate.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.hibernate.common</groupId>
-         <artifactId>hibernate-commons-annotations</artifactId>
-         <version>${hibernate-commons-annotations.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.hibernate.javax.persistence</groupId>
-         <artifactId>hibernate-jpa-2.1-api</artifactId>
-         <version>${hibernate-jpa.version}</version>
-      </dependency>
-      <dependency>
-         <groupId>org.springframework</groupId>
-         <artifactId>spring-orm</artifactId>
-         <version>${springframework.version}</version>
-      </dependency>
+        </dependency> -->
+      
       <!-- Servlet, JSP, JSTL -->
       <dependency>
          <groupId>javax.servlet</groupId>
@@ -319,6 +281,14 @@
    
    
    <build>
+   	  <resources>
+   	  	<resource>
+   	  		<directory>src/main/resources</directory>
+   	  		<filtering>true</filtering>
+   	  	</resource>   	  	
+   	  </resources>
+   	  <sourceDirectory>src/main/java</sourceDirectory>
+   	  <outputDirectory>target</outputDirectory>
       <plugins>
          <plugin>
              <groupId>org.springframework.boot</groupId>

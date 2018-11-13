@@ -1,5 +1,6 @@
 package com.happyweekend.service;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,11 @@ public class LoginService implements ILoginService{
 	private static List<Login> logins = new ArrayList<>();
 	
 	public LoginService() {
-		Login l = new Login("lucas", "p");
+		Login l = new Login();
+		
+		l.setLoginName("lucas");
+		//byte[] encodedPassword =  MessageDigest.getInstance("MD5").digest("p".getBytes());
+		l.setPassword("p");
 		logins.add(l);
 	}
 	

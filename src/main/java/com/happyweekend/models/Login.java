@@ -1,16 +1,11 @@
 package com.happyweekend.models;
-
-import org.apache.tomcat.util.security.MD5Encoder;
+ 
 
 public class Login {
 	private Integer id;
 	private String loginName;
 	private String password;
 	
-	public Login(String loginName, String password) {
-		this.loginName = loginName;
-		this.password = MD5Encoder.encode(password.getBytes());
-	}
 	
 	public Integer getId() {
 		return id;
