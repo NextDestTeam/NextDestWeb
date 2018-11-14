@@ -10,7 +10,7 @@
 </head>
 <body>
 <% 
-List<Person> persons = (List<Person>) session.getAttribute("persons"); 
+List<Person> persons = (List<Person>) request.getAttribute("persons"); 
 %>
 <%for(Person p : persons){%>
 	<h1><%= p.getFirstName() %></h1>
