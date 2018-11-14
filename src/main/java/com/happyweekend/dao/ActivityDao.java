@@ -18,7 +18,6 @@ public class ActivityDao implements Dao<Activity>{
 
 	@Override
 	public Activity get(Integer id) {
-		// TODO Auto-generated method stub
 		Activity activity = new Activity();
 		ResultSet rs;
 		String query = "SELECT * FROM ACTIVITY WHERE ID='" + id + "'";
@@ -34,7 +33,6 @@ public class ActivityDao implements Dao<Activity>{
 			activity.setShortDescription(rs.getString("short_description"));
 			activity.setPrice(rs.getInt("price"));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return activity;
@@ -42,7 +40,6 @@ public class ActivityDao implements Dao<Activity>{
 
 	@Override
 	public List<Activity> getAll() {
-		// TODO Auto-generated method stub
 		List<Activity> activities = new ArrayList<>();
 		ResultSet rs;
 		String query = "SELECT * FROM ACTIVITY";
@@ -61,7 +58,6 @@ public class ActivityDao implements Dao<Activity>{
 				activities.add(activity);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return activities;
@@ -69,10 +65,9 @@ public class ActivityDao implements Dao<Activity>{
 
 	@Override
 	public void save(Activity t) {
-		// TODO Auto-generated method stub
 		Statement stm;
 		String query = "INSERT INTO ACTIVITY(id, name, short_description, description, location, price, person_id)"
-					 + "values((select max(id) from activity), '"
+					 + "values(default, '"
 					 + t.getName() + "', '"
 					 + t.getShortDescription() + "', '"
 					 + t.getDescription() + "', '"
@@ -83,14 +78,12 @@ public class ActivityDao implements Dao<Activity>{
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}
 
 	@Override
 	public void update(Activity t) {
-		// TODO Auto-generated method stub
 		Statement stm;
 		String query = "UPDATE ACTIVITY SET("
 					 + "id='" + t.getId() + "', "
@@ -104,14 +97,12 @@ public class ActivityDao implements Dao<Activity>{
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}				
 	}
 
 	@Override
 	public void delete(Activity t) {
-		// TODO Auto-generated method stub
 		Statement stm;
 		String query = "delete from activity "
 					 + "where id='" + t.getId() + "'";	
@@ -119,7 +110,6 @@ public class ActivityDao implements Dao<Activity>{
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}

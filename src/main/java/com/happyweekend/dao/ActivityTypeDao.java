@@ -13,13 +13,11 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 	Connection connection;
 	
 	public ActivityTypeDao(Connection connection) {
-		// TODO Auto-generated constructor stub
 		this.connection = connection;
 	}
 
 	@Override
 	public ActivityType get(Integer id) {
-		// TODO Auto-generated method stub
 		ActivityType activityType = new ActivityType();
 		ResultSet rs;
 		String query = "SELECT * FROM ACTIVITY_TYPE WHERE ID='" + id + "'";
@@ -28,10 +26,9 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 			stm = this.connection.createStatement();
 			rs = stm.executeQuery(query);
 			rs.next();
-			activityType.setId(rs.getInt("id"));;
-			activityType.setName(rs.getString("name"));;
+			activityType.setId(rs.getInt("id"));
+			activityType.setName(rs.getString("name"));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return activityType;
@@ -39,7 +36,6 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 
 	@Override
 	public List<ActivityType> getAll() {
-		// TODO Auto-generated method stub
 		List<ActivityType> activityTypeList = new ArrayList<>();
 		ResultSet rs;
 		String query = "SELECT * FROM ACTIVITY_TYPE";
@@ -49,13 +45,12 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 			rs = stm.executeQuery(query);
 			while(rs.next()) {		
 				ActivityType activityType = new ActivityType();
-				activityType.setId(rs.getInt("id"));;
+				activityType.setId(rs.getInt("id"));
 				activityType.setName(rs.getString("name"));
 				activityTypeList.add(activityType);
 			}
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return activityTypeList;
@@ -63,23 +58,20 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 
 	@Override
 	public void save(ActivityType t) {
-		// TODO Auto-generated method stub
 		Statement stm;
 		String query = "INSERT INTO ACTIVITY_TYPE(id, name)"
-					 + "values((select max(id) from activity_type), '"
+					 + "values(default, '"
 					 + t.getName() + "')";
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
 	}
 
 	@Override
 	public void update(ActivityType t) {
-		// TODO Auto-generated method stub
 		Statement stm;
 		String query = "UPDATE ACTIVITY_TYPE SET("
 					 + "id='" + t.getId() + "', "
@@ -88,14 +80,12 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}				
 	}
 
 	@Override
 	public void delete(ActivityType t) {
-		// TODO Auto-generated method stub
 		Statement stm;
 		String query = "delete from activity_type "
 					 + "where id='" + t.getId() + "'";	
