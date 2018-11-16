@@ -9,6 +9,7 @@ public class Person {
 	private String email;
 	private Date age;
 	private Integer personTypeId;
+	private Login login;
 	
 	public Integer getId() {
 		return id;
@@ -46,5 +47,12 @@ public class Person {
 	public void setPersonTypeId(Integer personTypeId) {
 		this.personTypeId = personTypeId;
 	}
-	
+
+	public Login getLogin() {
+		return login;
+	}
+
+	public void setLogin(Login login) {
+		this.login = login;
+	}
 }

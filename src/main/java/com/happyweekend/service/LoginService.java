@@ -1,11 +1,14 @@
 package com.happyweekend.service;
 
-import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.happyweekend.connection.ConnectionManager;
+import com.happyweekend.dao.LoginDao;
 import com.happyweekend.models.Login;
 import com.happyweekend.service.interfaces.ILoginService;
+
+
 
 public class LoginService implements ILoginService{
 
@@ -29,9 +32,13 @@ public class LoginService implements ILoginService{
 		
 	}
 
+
+
 	@Override
 	public void save(Login login) {
-		logins.add(login);
+		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
+
+		dao.save(login);
 		
 	}
 

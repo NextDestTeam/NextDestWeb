@@ -9,23 +9,27 @@ import javax.sql.DataSource;
 public class ConnectionManager {
 	private Connection connection;
 	private String strStatus;
+	private static ConnectionManager instance;
 	
-	public ConnectionManager() {
+	private ConnectionManager() {
 		 
 	}
 	
 	public Connection connect() {
 		try {
-			InitialContext cxt = new InitialContext(); 
+			InitialContext cxt = new InitialContext();
 			if ( cxt != null )
 			{
-			    DataSource ds = (DataSource) cxt.lookup( "java:jboss/PostgresXA");
-				if ( ds == null ) {
-					this.strStatus = "Error with the creation of the datasource";
-				}else{
-		            this.connection = ds.getConnection();
-			    }
-			} 
+
+					DataSource ds = (DataSource) cxt.lookup("java:jboss/PostgresXA");
+					if (ds == null) {
+						this.strStatus = "Error with the creation of the datasource";
+					} else {
+
+						this.connection = ds.getConnection();
+					}
+
+			}
 		}
 		catch(Exception e)
 		{
@@ -44,5 +48,11 @@ public class ConnectionManager {
 			e.printStackTrace();
 		}
 	}
+
+	public static ConnectionManager getInstance(){
+		return (instance=(instance!=null?instance:new ConnectionManager()));
+	}
+
+
 
 }

@@ -3,8 +3,11 @@ package com.happyweekend.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.happyweekend.connection.ConnectionManager;
+import com.happyweekend.dao.PersonDao;
 import com.happyweekend.models.Person;
 import com.happyweekend.models.PersonType;
+import com.happyweekend.service.interfaces.ILoginService;
 import com.happyweekend.service.interfaces.IPersonService;
 
 public class PersonService implements IPersonService{
@@ -20,7 +23,15 @@ public class PersonService implements IPersonService{
 		personTypes.add(p2);
 		return personTypes;
 	}
-	
-	
+
+	@Override
+	public void save(Person person, ILoginService service) {
+		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
+
+		dao.save(person);
+		service.save(person.getLogin());
+
+	}
+
 
 }

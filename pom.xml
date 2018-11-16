@@ -65,8 +65,9 @@
       <commons-fileupload.version>1.3.2</commons-fileupload.version>
       <jackson-databind.version>2.9.7</jackson-databind.version>
       <imgscalr-lib.version>4.2</imgscalr-lib.version>
-      <webjars-locator.version>0.32</webjars-locator.version>
+      <webjars-locator.version>0.30</webjars-locator.version>
       <webjars-gentelella.version>1.3.0</webjars-gentelella.version>
+      <webjars-bootstrap.version>3.1.0</webjars-bootstrap.version>
 
       <!-- plugins -->
       <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
@@ -77,11 +78,11 @@
       <cargo-maven2-plugin.version>1.6.3</cargo-maven2-plugin.version>
    </properties>
    
-   <!-- <parent>
+   <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.0.5.RELEASE</version>
-    </parent> -->
+    </parent>
    
    <dependencies>
       <!-- Spring Framework -->
@@ -129,7 +130,7 @@
       </dependency>
        
       <!-- Spring boot -->
-      <!-- <dependency>
+      <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
@@ -141,7 +142,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency> -->
+        </dependency>
       
       <!-- Servlet, JSP, JSTL -->
       <dependency>
@@ -158,6 +159,29 @@
          <groupId>javax.servlet</groupId>
          <artifactId>jstl</artifactId>
          <version>${javax.servlet.jstl.version}</version>
+      </dependency>
+
+      <!-- Tomcat embedded container-->
+      <dependency>
+         <groupId>org.springframework.boot</groupId>
+         <artifactId>spring-boot-starter-tomcat</artifactId>
+         <scope>provided</scope>
+      </dependency>
+
+      <!-- Need this to compile JSP -->
+      <dependency>
+         <groupId>org.apache.tomcat.embed</groupId>
+         <artifactId>tomcat-embed-jasper</artifactId>
+         <scope>provided</scope>
+      </dependency>
+
+      <!-- Need this to compile JSP,
+          tomcat-embed-jasper version is not working, no idea why -->
+      <dependency>
+         <groupId>org.eclipse.jdt.core.compiler</groupId>
+         <artifactId>ecj</artifactId>
+         <version>RELEASE</version>
+         <scope>provided</scope>
       </dependency>
       <!-- Apache Tiles -->
       <dependency>
@@ -268,6 +292,13 @@
          <artifactId>gentelella</artifactId>
          <version>${webjars-gentelella.version}</version>
       </dependency>
+       <dependency>
+           <groupId>org.webjars</groupId>
+           <artifactId>bootstrap</artifactId>
+           <version>${webjars-bootstrap.version}</version>
+       </dependency>
+
+
 
       <!-- Test -->
       <dependency>
@@ -276,6 +307,39 @@
          <version>${junit.version}</version>
          <scope>test</scope>
       </dependency>
+      <dependency>
+         <groupId>org.junit.jupiter</groupId>
+         <artifactId>junit-jupiter-api</artifactId>
+         <scope>test</scope>
+      </dependency>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-test</artifactId>
+           <version>2.0.5.RELEASE</version>
+           <scope>test</scope>
+       </dependency>
+      <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-test</artifactId>
+         <version>5.0.9.RELEASE</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-test</artifactId>
+         <version>5.0.9.RELEASE</version>
+         <scope>test</scope>
+      </dependency>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot</artifactId>
+           <version>1.5.1.RELEASE</version>
+       </dependency>
+       <dependency>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot</artifactId>
+           <version>1.5.1.RELEASE</version>
+       </dependency>
 
    </dependencies>
    

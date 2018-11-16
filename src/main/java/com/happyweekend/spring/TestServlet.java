@@ -1,4 +1,4 @@
-package com.happyweekend.main;
+package com.happyweekend.spring;
 
 import java.io.IOException;
 import javax.servlet.ServletException;

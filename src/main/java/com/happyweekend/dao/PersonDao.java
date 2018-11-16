@@ -17,7 +17,7 @@ public class PersonDao implements Dao<Person> {
 	}
 
 	@Override
-	public Person get(Integer id) {
+	public Person get(Integer id) throws SQLException {
 		Person person = new Person();
 		ResultSet rs;
 		String query = "SELECT * FROM PERSON WHERE ID='" + id + "'";
@@ -34,6 +34,8 @@ public class PersonDao implements Dao<Person> {
 			person.setPersonTypeId(rs.getInt("person_type_id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			this.connection.close();
 		}
 		return person;
 	}

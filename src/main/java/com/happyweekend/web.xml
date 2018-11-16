@@ -4,20 +4,11 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>jspPersona</display-name>
-    <servlet-name>jspPersona</servlet-name>
-    <jsp-file>/WEB-INF/view/jspPersona.jsp</jsp-file>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>jspPersona</servlet-name>
-    <url-pattern>WEB-INF/view/jPersona</url-pattern>
-  </servlet-mapping>
   
+
   
   <!-- Spring configuration -->
-  <servlet>
+<!--   <servlet>
    <servlet-name>dispatcher</servlet-name>
    <servlet-class>
      org.springframework.web.servlet.DispatcherServlet
@@ -34,6 +25,6 @@
    <url-pattern>/spring/*</url-pattern>
    <url-pattern>*.html</url-pattern>
    <url-pattern>*.jsp</url-pattern>
- </servlet-mapping>
+ </servlet-mapping> -->
  <!-- End Spring configuration  -->
 </web-app>
