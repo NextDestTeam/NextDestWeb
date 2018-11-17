@@ -1,10 +1,11 @@
 package com.happyweekend.spring.form;
 
 import com.happyweekend.spring.form.validator.annotation.EqualPassword;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
 
 @EqualPassword(pass1 = "password",pass2 = "rePassword")
 public class RegisterForm {

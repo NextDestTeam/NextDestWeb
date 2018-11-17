@@ -10,7 +10,7 @@ import java.util.List;
 import com.happyweekend.models.Person;
 
 public class PersonDao implements Dao<Person> {
-	private Connection connection;
+	private final Connection connection;
 	
 	public PersonDao(Connection connection) {
 		this.connection = connection;

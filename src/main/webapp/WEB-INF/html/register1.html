@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title th:text="#{register}">Register</title>
+    <link rel='stylesheet' th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+
+    <link rel="stylesheet" href="/resources/css/register.css" th:href="@{/resources/css/register.css}"/>
+
+</head>
+<body>
+
+    <!--<div class="alert alert-danger" role="alert">
+
+        <div th:errors="${registerForm.*}">
+
+        </div>
+
+
+        <div th:if="${#fields.hasErrors('${registerForm.*}')}">
+            <table>
+                <tr th:each="var : ${#vars}">
+                    <td th:text="'key = '+${var.key}"></td>
+                    <td th:text=" 'value '+${var.value}"></td>
+                </tr>
+            </table>
+        </div>
+    </div>-->
+
+    <!--<div class="background-image"></div>-->
+    <img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/register_backgroound.jpg"></img>
+    <div class="col-sm-8 offset-sm-2 text-center ">
+
+        <div class="">
+            <form th:object="${registerForm}" name="registerForm" th:action="@{/register}" action="#" method="post">
+
+        <fieldset>
+            <!--<legend>Please Enter with Your Data</legend>-->
+                <div css="form-row">
+                    <div class="text-center">
+                        <img th:src="@{/resources/images/logo.png}" class="rounded" alt="Happy Weekend">
+                    </div>
+                </div>
+
+                <div class="form-row" >
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('firstName')}">
+
+                        <label for="firstName" class=" col-form-label">First name</label>
+                        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control " th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{firstName}">First Name Error</div>
+                    </div>
+                    <div class="form-group col-md-6" th:with="err=${#fields.hasErrors('lastName')}">
+                        <label for="lastName" class=" col-form-label">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control " th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{lastName}">Last Name Error</div>
+                    </div>
+
+                </div>
+                <div class="form-row " >
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('email')}">
+                        <label for="email" class=" col-form-label">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Email" class="form-control  input-medium" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{email}">Email Error</div>
+                    </div>
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('username')}">
+                        <label for="username"  class=" col-form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control " placeholder="Username" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{username}">User Name Error</div>
+                    </div>
+                </div>
+                <div class="form-row " >
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('password') or #fields.hasGlobalErrors()}">
+                        <label for="password" class=" col-form-label">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control " th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{password}">Password Error</div>
+                        <div th:if="${err and #fields.hasGlobalErrors() and #fields.errors().size()==1 }" class="" th:attrappend="class=' invalid-feedback'" th:errors="${registerForm}">Password Error</div>
+                    </div>
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('rePassword') or #fields.hasGlobalErrors()}">
+                        <label for="rePassword" class=" col-form-label">Re-type</label>
+                        <input type="password" id="rePassword" name="rePassword" class="form-control " placeholder="Re-type" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{rePassword}">Password Error</div>
+                        <div th:if="${err and #fields.hasGlobalErrors() and #fields.errors().size()==1 }" class="" th:attrappend="class=' invalid-feedback'" th:errors="${registerForm}">Password Error</div>
+                    </div>
+                </div>
+
+                <div class="form-actions text-center">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </div>
+
+            </div>
+        </fieldset>
+    </form>
+        </div>
+    </div>
+</body>
+</html>

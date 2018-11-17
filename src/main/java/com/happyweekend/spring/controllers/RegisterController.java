@@ -33,20 +33,20 @@ public class RegisterController {
 	@GetMapping("/register")
 	public ModelAndView index() {
 
-		return new ModelAndView("register1","registerForm",new RegisterForm());
+		return new ModelAndView("register1.html","registerForm",new RegisterForm());
 	}
 	
 	@PostMapping("/register")
-	public String register(@ModelAttribute("registerForm") @Valid RegisterForm form, BindingResult result) {
+	public ModelAndView register(@ModelAttribute("registerForm") @Valid RegisterForm form, BindingResult result) {
 
 		if(result.hasErrors()){
-			return "register1";
+			return new ModelAndView("register1.html","registerForm",form);
 		}
 
 		service.save(registerFormToPerson(form),loginService);
 
 
-		return "redirect:/results";
+		return new ModelAndView("redirect:/index.html");
 
 		
 	}

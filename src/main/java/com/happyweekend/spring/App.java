@@ -2,7 +2,7 @@ package com.happyweekend.spring;
 
 import java.util.Arrays;
 
-
+/*
 import org.apache.catalina.Context;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
@@ -12,13 +12,15 @@ import javax.sql.DataSource;
 import org.apache.catalina.startup.Tomcat;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+*//*import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;*//*
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.apache.tomcat.util.descriptor.web.ContextResource;
@@ -26,18 +28,18 @@ import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;*/
 
-@SpringBootApplication
-@EnableAutoConfiguration(exclude= {DataSourceAutoConfiguration.class,DataSourceTransactionManagerAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
-public class App implements WebApplicationInitializer {
+/*@SpringBootApplication
+@EnableAutoConfiguration(exclude= {DataSourceAutoConfiguration.class,DataSourceTransactionManagerAutoConfiguration.class,HibernateJpaAutoConfiguration.class})*/
+public class App {//extends SpringBootServletInitializer implements WebApplicationInitializer {
 
 	
-	public static void main(String args[]) {
+	/*public static void main(String args[]) {
 		SpringApplication.run(App.class, args);
 	}
 	
-/*	@Bean
+*//*	@Bean
 	  public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 	    return args -> {
 
@@ -49,7 +51,12 @@ public class App implements WebApplicationInitializer {
 	        System.out.println(beanName);
 	      }
 	    };
-	  }*/
+	  }*//*
+
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(App.class);
+    }
 	
     @Override
     public void onStartup(ServletContext container) {
@@ -80,7 +87,7 @@ public class App implements WebApplicationInitializer {
             @Override
             protected void postProcessContext(Context context) {
                 ContextResource resource = new ContextResource();
-                resource.setName("java:jboss/PostgresXA");
+                resource.setName("jdbc/myDataSource");
                 resource.setType(DataSource.class.getName());
                 resource.setProperty("driverClassName", "org.postgresql.Driver");
                 resource.setProperty("url", "jdbc:postgresql://localhost:5432/happyweekend");
@@ -95,14 +102,14 @@ public class App implements WebApplicationInitializer {
     @Bean(destroyMethod="")
     public DataSource jndiDataSource() throws IllegalArgumentException, NamingException {
         JndiObjectFactoryBean bean = new JndiObjectFactoryBean();
-        bean.setJndiName("java:comp/env/jdbc/myDataSource");
+        bean.setJndiName("java:jboss/PostgresXA");
         bean.setProxyInterface(DataSource.class);
         bean.setLookupOnStartup(false);
         bean.afterPropertiesSet();
         return (DataSource)bean.getObject();
     }
 
-
+*/
     
     
 

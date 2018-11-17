@@ -3,13 +3,13 @@ package com.happyweekend.models;
 import java.util.Date;
 
 public class Person {
-	private Integer id;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private Date age;
-	private Integer personTypeId;
-	private Login login;
+	private Integer id = 0;
+	private String firstName = "";
+	private String lastName = "";
+	private String email = "";
+	private Date age = new Date();
+	private Integer personTypeId = 0;
+	private Login login = new Login();
 	
 	public Integer getId() {
 		return id;
