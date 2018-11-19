@@ -109,4 +109,34 @@ public class PersonActivityCommentDao implements Dao<PersonActivityComment> {
 		}		
 	}
 
+	public List<PersonActivityComment> getByActivity(int id) {
+
+		List<PersonActivityComment> result = new ArrayList<>();
+		ResultSet rs;
+		String query = "SELECT * "
+				+ "FROM PERSON_ACTIVITY_COMMENT "
+				+ "WHERE activity_id ='" + id + "'";
+		Statement stm;
+		try {
+			stm = this.connection.createStatement();
+			rs = stm.executeQuery(query);
+			while (rs.next()) {
+
+                result.add(generateModel(rs));
+            }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+
+	}
+
+    private PersonActivityComment generateModel(ResultSet rs) throws SQLException {
+        PersonActivityComment activityComment = new PersonActivityComment();
+        activityComment.setActivityId(rs.getInt("activity_id"));
+        activityComment.setComment(rs.getString("comment"));
+        activityComment.setId(rs.getInt("id"));
+        activityComment.setPersonId(rs.getInt("person_id"));
+        return activityComment;
+    }
 }

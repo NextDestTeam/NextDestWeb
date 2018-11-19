@@ -53,10 +53,11 @@ public class ReactionDao implements Dao<Reaction> {
 				reaction.setReaction(rs.getString("reaction"));
 				reactions.add(reaction);
 			}
+			return reactions;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -103,5 +104,6 @@ public class ReactionDao implements Dao<Reaction> {
 			e.printStackTrace();
 		}		
 	}
+
 
 }

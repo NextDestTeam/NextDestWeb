@@ -5,6 +5,7 @@ public class PersonActivityComment {
 	private String comment;
 	private Integer personId;
 	private Integer activityId;
+	private Person person;
 	
 	public Integer getId() {
 		return id;
@@ -29,5 +30,13 @@ public class PersonActivityComment {
 	}
 	public void setActivityId(Integer activityId) {
 		this.activityId = activityId;
+	}
+
+	public Person getPerson() {
+		return person;
+	}
+
+	public void setPerson(Person person) {
+		this.person = person;
 	}
 }

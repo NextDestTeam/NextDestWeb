@@ -1,16 +1,62 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <title th:text="#{register}">Register</title>
-    <link rel='stylesheet' th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
-    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
-    <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
-    <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+    <title >Activity Form</title>
+    <!--<link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">-->
+    <link rel='stylesheet'
 
-    <link rel="stylesheet" href="/resources/css/register.css" th:href="@{/resources/css/activity_form.css}"/>
+          th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+          <!--<link rel='stylesheet' src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css" >-->
+    <link rel='stylesheet'
+
+          th:href="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.css}">
+
+          <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+          crossorigin="anonymous" ></script>-->
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
+
+    ></script>
+
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous" ></script>-->
+    <script
+            th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+            <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+                    crossorigin="anonymous"></script>-->
+    <script
+            th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+            <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js" ></script>-->
+    <script
+
+            th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
+
+    <link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />
+    <link rel="stylesheet"  th:href="@{/resources/css/activity_form.css}"/>
+
+    <script >
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imgPreview')
+                        .attr('src', e.target.result);
+                        //.width(150)
+                        /.height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
 </head>
 <body>
@@ -34,38 +80,154 @@
 
 <!--<div class="background-image"></div>-->
 <!--<img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/register_backgroound.jpg"></img>-->
-<div class="col-sm-8 offset-sm-2 text-center ">
+<div class="col-sm-10 offset-sm-1 text-center ">
 
-    <div class="">
-        <form th:object="${activityForm}" name="activityForm" th:action="@{/activity}" action="#" method="post">
-
+    <div class="card form-card">
+        <legend>Activity Form</legend>
+        <form th:object="${activityForm}"   name="activityForm" enctype="multipart/form-data"  th:action="@{/activity}" action="#" method="post">
+            <input type="hidden" th:type="hidden" th:id="id" id="id" name="id" th:value="${id}"/>
             <fieldset>
-                <legend>New Activity</legend>-
-
-                <div class="form-row" >
-                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('firstName')}">
-
-                        <label for="firstName" class=" col-form-label">First name</label>
-                        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control " th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
-                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{firstName}">First Name Error</div>
+                <div class="form-group" >
+                    <div class="input-group " th:with="err=${#fields.hasErrors('name')}">
+                        <label for="name" class=" col-form-label">Activity Name</label>
+                        <input type="text" class="form-control" th:value="*{name}" id="name" name="name" placeholder="Activity Name" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{name}">Activity Name Error</div>
                     </div>
-                    <div class="form-group col-md-6" th:with="err=${#fields.hasErrors('lastName')}">
-                        <label for="lastName" class=" col-form-label">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control " th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
-                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{lastName}">Last Name Error</div>
+                </div>
+                <div class="form-group" >
+                    <div class="input-group " th:with="err=${#fields.hasErrors('shortDescription')}">
+                        <label for="shortDescription" class="col-form-label" >Activity short description</label>
+                        <input type="text" id="shortDescription" name="shortDescription" th:value="*{shortDescription}" placeholder="Please describe shortly your activity" class="form-control" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{shortDescription}">Activity Short Description Error</div>
                     </div>
-
+                </div>
+                <div class="form-group" >
+                    <div class="input-group" th:with="err=${#fields.hasErrors('location')}">
+                        <label for="location" class="col-form-label">Activity location</label>
+                        <input type="text" th:class="form-control" th:value="*{location}" id="location" name="location" placeholder="Please describe where will be your activity"  th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{location}">Activity Location Error</div>
+                    </div>
+                </div>
+                <div class="form-row form-group" >
+                    <div class="input-group " th:with="err=${#fields.hasErrors('description')}">
+                        <label for="description" class="col-form-label">Activity description</label>
+                        <textarea class="form-control"  id="description" name="description" th:value="*{description}" placeholder="Please fill with more detailed information about the event" aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"></textarea>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{description}">Activity Description Error</div>
+                    </div>
+                </div>
+                <div class="form-row form-group" >
+                    <div class="input-group " th:with="err=${#fields.hasErrors('activityType')}">
+                        <label for="description" class="col-form-label">Activity type</label>
+                        <select class="form-control custom-select custom-select-lg " th:field="*{activityTypeId}"  th:value="*{activityTypeId}">
+                            <option th:each="type : *{activityTypeList}" th:value="${type.id}" th:text="${type.name}">Open this select menu</option>
+                        </select>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{activityType}">Activity Type Error</div>
+                    </div>
+                </div>
+                <div class="form-row form-group">
+                    <div class="input-group " th:with="err=${#fields.hasErrors('price')}">
+                        <div class="input-group">
+                            <label for="price" class="col-form-label ">Activity cost</label>
+                            <input type="text" id="price" name="price" class="form-control" aria-label="Cost" th:value="*{price}"/>
+                            <div  class="input-group-append">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{price}">Price Error</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row form-group">
+                    <div class="container" th:with="err=${#fields.hasErrors('date')}">
+                        <div class="row">
+                            <div class=''>
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <label for="name" class=" col-form-label">Activity date</label>
+                                        <input type='datetime-local' id="date" name="date" th:value="*{date}" class="form-control" />
+                                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{date}">Date Error</div>
+                                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#datetimepicker1').datetimepicker();
+                                });
+                            </script>
+                        </div>
+                    </div>
                 </div>
 
+                <div class="form-group form-row">
+                    <div class="custom-file">
+                        <input type="file" th:id="file" name="file" class="custom-file-input" id="file"
+                               accept="image/gif, image/jpeg, image/png"
+                               onchange="readURL(this);"
+                        >
+                        <label class="custom-file-label" for="file">Select file</label>
+                    </div>
+                    <img src="" class="img-fluid"  id="imgPreview" th:src="*{imageBytes}">
+                </div>
 
                 <div class="form-actions text-center">
                     <button type="submit" class="btn btn-primary">Save Activity</button>
                 </div>
 
+
+            </fieldset>
+        </form>
     </div>
-    </fieldset>
-    </form>
-</div>
+
+
+        <!--<div class="stats">
+            <a href="#" class=" stat-item interested">
+                <i class="fa fa-thumbs-up icon "></i>Interested
+                <i></i>
+            </a>
+            <a href="#" class="btn btn-default stat-item insecure">
+                <i class="fa fa-thumbs-down icon"></i>Insecure
+            </a>
+            <a href="#" class="btn btn-default stat-item bad">
+                <i class="fa fa-thumbs-down icon"></i>Imposible
+            </a>
+        </div>-->
+
+    <div th:if="${activityForm.id>0}">
+        <div class="panel panel-white post panel-shadow" th:each="comment :${ activityForm.comments}">
+          <div class="post-heading">
+              <div class="pull-left meta">
+                  <div class="title h1">
+                      <a href="#"><b th:text="${comment.person.firstName + ' ' + comment.person.lastName}">Ryan Haywood</b></a>
+                  </div>
+              </div>
+          </div>
+          <div class="post-description h4">
+              <p th:text="${comment.comment}">...</p>
+
+          </div>
+      </div>
+        <div class="card form-card">
+            <form th:object="${activityComment}"   name="activityComment"   th:action="@{/activity/comment}" action="#" method="post">
+                <input type="hidden" th:type="hidden" th:id="id" id="id" name="id" th:value="*{id}"/>
+                <input type="hidden" th:type="hidden" th:id="personId" id="personId" name="personId" th:value="*{personId}"/>
+                <input type="hidden" th:type="hidden" th:id="activityId" id="activityId" name="activityId" th:value="*{activityId}"/>
+
+                <div class="form-row form-group" >
+                    <div class="input-group " th:with="err=${#fields.hasErrors('comment')}">
+                        <label for="description" class="col-form-label">Activity comments</label>
+                        <textarea class="form-control" th:value="*{comment}"  id="comment" name="comment" placeholder="Please let your comments" aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"></textarea>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{comment}">Activity Description Error</div>
+                    </div>
+                </div>
+                <div class="form-actions text-center">
+                    <button type="submit" class="btn btn-primary">Comment Activity</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 </body>
 </html>

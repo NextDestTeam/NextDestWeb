@@ -25,6 +25,12 @@ public class PersonService implements IPersonService{
 	}
 
 	@Override
+	public Person get(int id) {
+		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
+		return dao.get(id);
+	}
+
+	@Override
 	public void save(Person person, ILoginService service) {
 		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
 

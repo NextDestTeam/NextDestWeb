@@ -1,5 +1,7 @@
 package com.happyweekend.models;
 
+import java.util.Date;
+
 public class Activity {
 	private Integer id;
 	private String name;
@@ -9,6 +11,10 @@ public class Activity {
 	private String location;
 	private Integer price;
 	private Integer personId;
+	private Date date;
+	private int activityTypeId;
+	private ActivityType activityType = new ActivityType();
+	private String image;
 	
 	public Integer getId() {
 		return id;
@@ -58,6 +64,37 @@ public class Activity {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 
+
+	public Date getDate() {
+		return date;
+	}
+
+	public void setDate(Date date) {
+		this.date = date;
+	}
+
+	public ActivityType getActivityType() {
+		return activityType;
+	}
+
+	public void setActivityType(ActivityType activityType) {
+		this.activityType = activityType;
+	}
+
+	public int getActivityTypeId() {
+		return activityTypeId;
+	}
+
+	public void setActivityTypeId(int activityTypeId) {
+		this.activityTypeId = activityTypeId;
+	}
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

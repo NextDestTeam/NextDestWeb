@@ -1,0 +1,49 @@
+body{
+    background-color: aliceblue;
+}
+
+.col-form-label{
+    margin-right: 20px;
+}
+
+.img-fluid. {
+    max-width: 100%;
+    height:auto;
+    margin:15px !important;
+}
+
+.pull-left.meta{
+    margin: 10px;
+}
+
+.panel-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+}
+.panel-white {
+    border: 1px solid #dddddd;
+}
+.panel-white  .panel-heading {
+    color: #333;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.stat-item.interested{
+    margin:10px;
+    background-color:#AAEEAA;
+}
+
+.stat-item.insecure{
+    margin:10px;
+    background-color:#EEEEAA;
+}
+
+.stat-item.bad{
+    margin:10px;
+    background-color:#EEAAAA;
+}
+
+.form-card{
+    padding:40px;
+}
+

@@ -9,5 +9,7 @@ public interface IPersonService {
 
 	public List<PersonType> getPersonTypes();
 
+	public  Person get(int id);
+
     void save(Person person,ILoginService iLoginService);
 }

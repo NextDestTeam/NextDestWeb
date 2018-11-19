@@ -63,6 +63,7 @@
       <commons-collections.version>3.2.2</commons-collections.version>
       <commons-codec.version>1.10</commons-codec.version>
       <commons-fileupload.version>1.3.2</commons-fileupload.version>
+      <commons-io.version>2.4</commons-io.version>
       <jackson-databind.version>2.9.7</jackson-databind.version>
       <imgscalr-lib.version>4.2</imgscalr-lib.version>
       <webjars-locator.version>0.30</webjars-locator.version>
@@ -70,6 +71,7 @@
       <webjars-bootstrap.version>4.1.3</webjars-bootstrap.version>
       <webjars-jquery.version>3.3.1-1</webjars-jquery.version>
       <webjars-popper.version>1.14.4</webjars-popper.version>
+      <smalot-bootstrap-datetimepicker.version>2.4.4</smalot-bootstrap-datetimepicker.version>
        <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
       <validation-api.version>2.0.1.Final</validation-api.version>
       <javax.el.version>2.2.6</javax.el.version>
@@ -273,6 +275,12 @@
          <artifactId>commons-fileupload</artifactId>
          <version>${commons-fileupload.version}</version>
       </dependency>
+      <!-- Apache Commons IO -->
+      <dependency>
+         <groupId>commons-io</groupId>
+         <artifactId>commons-io</artifactId>
+         <version>${commons-io.version}</version>
+      </dependency>
       <!-- General data-binding functionality for Jackson: works on core streaming API.
          Used for return JSON data from spring Controller using @ResponseBody 
          https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
@@ -322,6 +330,12 @@
          <artifactId>popper.js</artifactId>
          <version>${webjars-popper.version}</version>
       </dependency>
+      <dependency>
+         <groupId>org.webjars.bower</groupId>
+         <artifactId>smalot-bootstrap-datetimepicker</artifactId>
+         <version>${smalot-bootstrap-datetimepicker.version}</version>
+      </dependency>
+
 
 
 

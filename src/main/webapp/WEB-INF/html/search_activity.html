@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tiles="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title >Activity Search</title>
+    <!--<link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">-->
+    <link rel='stylesheet'
+
+          th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+    <!--<link rel='stylesheet' src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css" >-->
+    <link rel='stylesheet'
+
+          th:href="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.css}">
+
+    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous" ></script>-->
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
+
+    ></script>
+
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous" ></script>-->
+    <script
+            th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>-->
+    <script
+            th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js" ></script>-->
+    <script
+
+            th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
+
+    <link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />
+    <link rel="stylesheet"  th:href="@{/resources/css/activity_form.css}"/>
+
+</head>
+<body>
+
+
+<div class="col-sm-10 offset-sm-1 text-center ">
+
+    <div class="card form-card">
+        <legend>Activity Form</legend>
+        <form th:object="${activitySearch}"   name="activitySeach"   th:action="@{/activity/search}" action="#" method="post">
+            <fieldset>
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" th:value="*{name}" id="name" name="name" placeholder="Activity Name" />
+
+                    </div>
+                    <div class="col">
+                        <input type="text" id="shortDescription" name="shortDescription" th:value="*{shortDescription}" placeholder="Please describe shortly your activity" class="form-control"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Save Activity</button>
+                    </div>
+                </div>
+                <!--<div class="form-actions text-center">
+
+                </div>-->
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="card form-card">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+
+                <!--id, name, short_description, description, location, price, person_id, acivity_type-->
+                <th scope="col">#</th>
+                <th scope="col">Name</th>
+                <th scope="col">Short description</th>
+                <th scope="col">Location</th>
+                <th scope="col">Type</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="line :${results}">
+                <th scope="row" th:text="${line.count}">1</th>
+                <td th:text="${line.name}">Mark</td>
+                <td th:text="${line.shortDescription}">Otto</td>
+                <td th:text="${line.location}">@mdo</td>
+                <td th:text="${line.activityType.name}">Otto</td>
+                <td><a th:href="@{activity/id/}+line.id" class="badge badge-light">Light</a></td>
+            </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+</body>
+</html>

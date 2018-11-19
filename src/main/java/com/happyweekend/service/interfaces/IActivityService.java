@@ -9,4 +9,6 @@ public interface IActivityService {
     public List<Activity> getActivities();
 
     void save(Activity activity);
+
+    Activity get(int id);
 }

@@ -40,6 +40,14 @@
 		<property name="templateMode" value="HTML5" />
 		<property name="order" value="1"/>
 	</bean>
+
+	<bean id="multipartResolver"
+				class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+		<!-- setting maximum upload size 5mb-->
+		<property name="maxUploadSize" value="5000000" />
+
+	</bean>
 	
 	<bean id="templateEngine" class="org.thymeleaf.spring5.SpringTemplateEngine">
 		<property name="templateResolver" ref="templateResolver"/>
