@@ -43,9 +43,25 @@
 
 </head>
 <body>
+<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Happy Weekend</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            <!--<div class="nav-collapse collapse">-->
 
+            <li class="nav-item active"><a class="nav-link"  th:href="@{/index}">Home</a></li>
+            <li class="nav-item active"><a class="nav-link" th:href="@{/activity}">New Activity</a></li>
+            <li class="nav-item "><a class="nav-link" th:href="@{/activity/search}">Search Activity</a></li>
 
-<div class="col-sm-10 offset-sm-1 text-center ">
+            <!--</div>-->
+        </ul>
+    </div>
+</div>
+
+<div class="col-sm-8 offset-sm-2 text-center">
 
     <div class="card form-card">
         <legend>Activity Form</legend>
@@ -55,9 +71,9 @@
                     <div class="col">
                         <input type="text" class="form-control" th:value="*{name}" id="name" name="name" placeholder="Activity Name" />
 
-                    </div>
-                    <div class="col">
-                        <input type="text" id="shortDescription" name="shortDescription" th:value="*{shortDescription}" placeholder="Please describe shortly your activity" class="form-control"/>
+
+                        <input type="text" id="shortDescription" name="shortDescription" th:value="*{shortDescription}"
+                               placeholder="Short description" class="form-control"/>
                     </div>
                 </div>
                 <div class="row">
@@ -71,7 +87,9 @@
             </fieldset>
         </form>
     </div>
+</div>
 
+<div class="col-sm-10 offset-sm-1 text-center ">
     <div class="card form-card">
         <table class="table table-striped">
             <thead>
@@ -93,7 +111,7 @@
                 <td th:text="${line.shortDescription}">Otto</td>
                 <td th:text="${line.location}">@mdo</td>
                 <td th:text="${line.activityType.name}">Otto</td>
-                <td><a th:href="@{activity/id/line.id}" class="badge badge-light">See/Edit</a></td>
+                <td><a th:href="@{activity/id/{id}(id=${line.id})}" class="badge badge-info">See/Edit</a></td>
             </tr>
 
             </tbody>

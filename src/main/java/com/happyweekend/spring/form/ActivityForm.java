@@ -6,6 +6,7 @@ import com.happyweekend.models.ActivityType;
 import com.happyweekend.models.PersonActivityComment;
 import com.happyweekend.models.Reaction;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.context.annotation.Bean;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;

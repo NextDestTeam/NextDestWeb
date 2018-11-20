@@ -1,5 +1,6 @@
 package com.happyweekend.spring.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +12,9 @@ import java.util.Optional;
 
 @Controller
 public class HomeController {
+
+    @Autowired
+    ActivityController activityController;
 
     @RequestMapping(value = "/testResolver", method = RequestMethod.GET)
     public ModelAndView showHome(@RequestParam(value = "viewResolver") Optional<String> viewResolver) {
@@ -29,9 +33,12 @@ public class HomeController {
         return result;
     }
 
-    @GetMapping("home")
     @RequestMapping("/")
     public ModelAndView index(){
-        return new ModelAndView("index.html");
+
+
+
+
+        return new ModelAndView("index.html","activities",activityController.getUserActivities());
     }
 }

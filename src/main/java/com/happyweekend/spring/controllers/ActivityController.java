@@ -14,8 +14,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 
 @Controller
@@ -85,6 +87,18 @@ public class ActivityController {
 
     }
 
+    public List<ActivityForm> getUserActivities(){
+        List<Activity> activities = service.getActivities();
+        List<ActivityForm> list = new ArrayList<>();
+        for(Activity a : activities) {
+            ActivityForm form = new ActivityForm(a);
+
+            form.setImageBytes(loadImage(form.getImageName()));
+            list.add(form);
+        }
+        return list;
+    }
+
     private String loadImage(String imageName) {
 
         try {
@@ -96,8 +110,9 @@ public class ActivityController {
             byte[]  bytes = new byte[(int)serverFile.length()];
 
             fileInputStream.read(bytes);
+            String img = Base64.getEncoder().encodeToString(bytes).toUpperCase();
             //data:image/png;
-            return new String("data:image/png;"+Base64.getDecoder().decode(bytes));
+            return new String("data:image/png;"+img);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -120,7 +135,7 @@ public class ActivityController {
         service.save(formToModel(form));
         
 
-        return new ModelAndView("redirect:/index.html");
+        return new ModelAndView("redirect:/");
     }
 
     @PostMapping(path = "/activity/comment")

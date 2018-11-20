@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,21 +34,21 @@ public class LoginController extends HandlerInterceptorAdapter {
                              Object controller) throws Exception {
 
         //TODO REMOVE THIS
-        return true;
+//        return true;
         //TODO UNCOMENT THIS
-//        String uri = request.getRequestURI();
-//        if(uri.endsWith("login")||uri.endsWith("register")
-//                ||uri.matches(".*/resources.*")
-//                ||uri.matches(".*/webjars.*")){
-//            return true;
-//        }
-//
-//        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
-//            return true;
-//        }
-//
-//        response.sendRedirect("/login");
-//        return false;
+        String uri = request.getRequestURI();
+        if(uri.endsWith("login")||uri.endsWith("register")
+                ||uri.matches(".*/resources.*")
+                ||uri.matches(".*/webjars.*")){
+            return true;
+        }
+
+        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
+            return true;
+        }
+
+        response.sendRedirect("login");
+        return false;
     }
 
     @GetMapping(path = "/login")
@@ -77,7 +78,7 @@ public class LoginController extends HandlerInterceptorAdapter {
 
         session.setAttribute(USER_LOGIN_SESSION,login);
 
-        return "redirect:/home";
+        return "redirect:/";
     }
 
     @RequestMapping("/logout")

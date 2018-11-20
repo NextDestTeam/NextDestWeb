@@ -11,7 +11,8 @@ import java.util.List;
 public class ActivityService implements IActivityService {
     @Override
     public List<Activity> getActivities() {
-        return null;
+        ActivityDao dao = new ActivityDao(ConnectionManager.getInstance().connect());
+        return dao.getAll();
     }
 
     @Override

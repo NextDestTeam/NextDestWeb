@@ -1,0 +1,11 @@
+<!--
+<Context>
+
+
+
+    &lt;!&ndash;<Resource name="java:jboss/PostgresXA" auth="Container" type="javax.sql.DataSource"
+              maxActive="100" maxIdle="30" maxWait="10000"
+              username="lucas" password="p" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/happyweekend"/>&ndash;&gt;
+
+</Context>-->

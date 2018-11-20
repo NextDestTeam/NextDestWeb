@@ -39,58 +39,51 @@
             th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
 </head>
 <body>
-<div th:replace="fragments/header :: header">
-    <div class="navbar navbar-inverse navbar-static-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <button type="button" class="btn btn-navbar" data-toggle="collapse"
-                        data-target=".nav-collapse">
-                    <span class="icon-bar"></span> <span class="icon-bar"></span> <span
-                        class="icon-bar"></span>
-                </button>
-                <a class="brand" href="#">mendlik</a>
-                <div class="nav-collapse collapse">
-                    <ul class="nav">
-                        <li class=""><a href="/home">Home</a></li>
-                        <li class=""><a href="/activity">New Activity</a></li>
-                        <li class=""><a href="/activity/search">Search Activity</a></li>
-                    </ul>
-                </div>
-            </div>
+<!--<div th:replace="fragments/header :: header">-->
+    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Happy Weekend</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <!--<div class="nav-collapse collapse">-->
+
+                <li class="nav-item active"><a class="nav-link"  th:href="@{/index}">Home</a></li>
+                <li class="nav-item active"><a class="nav-link" th:href="@{/activity}">New Activity</a></li>
+                <li class="nav-item active"><a class="nav-link" th:href="@{/activity/search}">Search Activity</a></li>
+
+                <!--</div>-->
+            </ul>
         </div>
     </div>
     <div class="container">
-        <div class="hero-unit">
-            <div class="row">
+        <div class="hero-unit" th:each="activity,estat :${activities}">
+            <div class="row" >
                 <div class="col-sm-6">
                     <div class="card">
+                        <img src="" class="card-img-top"  id="imgPreview" th:src="${activity.imageBytes}">
                         <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title" th:text="${activity.name}">Special title treatment</h5>
+                            <p class="card-text" th:text="${activity.name}">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-primary" th:href="@{activity/id/{id}(id=${activity.id})}">See</a>
+                            <!--<a th:href="@{activity/id/activity.id}" class="badge badge-light">See/Edit</a>-->
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-6" th:if="${!(estat.count==estat.size)}">
                     <div class="card">
+                        <img src="" class="card-img-top"  id="imgPreview" th:src="${activity.imageBytes}">
                         <div class="card-body">
-                            <h5 class="card-title">Special title treatment</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <h5 class="card-title" th:text="${activity.name}">Special title treatment</h5>
+                            <p class="card-text" th:text="${activity.name}">With supporting text below as a natural lead-in to additional content.</p>
+                            <a href="#" class="btn btn-primary" th:href="@{activity/id/{id}(id=${activity.id})}">See</a>
+                            <!--<a th:href="@{activity/id/activity.id}" class="badge badge-light">See/Edit</a>-->
                         </div>
                     </div>
                 </div>
             </div>
-            <h1>Test</h1>
-            <p>
-                Welcome to the Spring MVC Quickstart application!
-                Get started quickly by signing up.
-            </p>
-            <p>
-                <a href="/signup" th:href="@{/signup}" class="btn btn-large btn-success">Sign up</a>
-            </p>
         </div>
     </div>
-</div>
 </body>
 </html>

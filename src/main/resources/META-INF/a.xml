@@ -1,33 +1,34 @@
+<!--
 <Context>
 
-    <!-- maxActive: Maximum number of database connections in pool. Make sure you
+    &lt;!&ndash; maxActive: Maximum number of database connections in pool. Make sure you
          configure your mysqld max_connections large enough to handle
          all of your db connections. Set to -1 for no limit.
-         -->
+         &ndash;&gt;
 
-    <!-- maxIdle: Maximum number of idle database connections to retain in pool.
+    &lt;!&ndash; maxIdle: Maximum number of idle database connections to retain in pool.
          Set to -1 for no limit.  See also the DBCP 1.x documentation on this
          and the minEvictableIdleTimeMillis configuration parameter.
-         -->
+         &ndash;&gt;
 
-    <!-- maxWait: Maximum time to wait for a database connection to become available
+    &lt;!&ndash; maxWait: Maximum time to wait for a database connection to become available
          in ms, in this example 10 seconds. An Exception is thrown if
          this timeout is exceeded.  Set to -1 to wait indefinitely.
-         -->
+         &ndash;&gt;
 
-    <!-- username and password: MySQL username and password for database connections  -->
+    &lt;!&ndash; username and password: MySQL username and password for database connections  &ndash;&gt;
 
-    <!-- driverClassName: Class name for the old mm.mysql JDBC driver is
+    &lt;!&ndash; driverClassName: Class name for the old mm.mysql JDBC driver is
          org.gjt.mm.mysql.Driver - we recommend using Connector/J though.
          Class name for the official MySQL Connector/J driver is com.mysql.jdbc.Driver.
-         -->
+         &ndash;&gt;
 
-    <!-- url: The JDBC connection url for connecting to your MySQL database.
-         -->
+    &lt;!&ndash; url: The JDBC connection url for connecting to your MySQL database.
+         &ndash;&gt;
 
     <Resource name="java:jboss/PostgresXA" auth="Container" type="javax.sql.DataSource"
               maxActive="100" maxIdle="30" maxWait="10000"
               username="lucas" password="p" driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://localhost:5432/happyweekend"/>
 
-</Context>
+</Context>-->
