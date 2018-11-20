@@ -7,7 +7,8 @@ import com.happyweekend.connection.ConnectionManager;
 import com.happyweekend.dao.LoginDao;
 import com.happyweekend.models.Login;
 import com.happyweekend.service.interfaces.ILoginService;
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.util.DigestUtils;
 
 
 public class LoginService implements ILoginService{
@@ -24,22 +25,28 @@ public class LoginService implements ILoginService{
 	}
 	
 	@Override
-	public boolean validLogin(Login login) {		
-		return logins.stream().filter(
-				l->l.getLoginName().equals(login.getLoginName())&&
-						l.getPassword().equals(login.getPassword())
-				).findFirst().isPresent();
-		
+	public boolean validLogin(Login login) {
+
+		encryptPassword(login);
+		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
+		return dao.get(login).getId()>0;
 	}
 
 
 
 	@Override
 	public void save(Login login) {
+		encryptPassword(login);
 		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
 
 		dao.save(login);
 		
+	}
+
+	private void encryptPassword(Login login) {
+		login.setPassword(new String(
+				DigestUtils.md5DigestAsHex(login.getPassword().getBytes()).toUpperCase()
+		));
 	}
 
 }

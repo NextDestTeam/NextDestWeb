@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,16 +68,23 @@ public class PersonDao implements Dao<Person> {
 	@Override
 	public void save(Person t) {
 		Statement stm;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = String.format("%s",t.getAge()==null?"null":
+				" TIMESTAMP '"+sdf.format(t.getAge())+"'");
+
 		String query = "INSERT INTO PERSON(id, first_name, last_name, email, age, person_type_id)"
 					 + "values(default, '"
 					 + t.getFirstName() + "', '"
 					 + t.getLastName() + "', '"
-					 + t.getEmail() + "', '"
-					 + t.getAge().toString() + "', '"
+					 + t.getEmail() + "', "
+					 + date+ ", '"
 					 + t.getPersonTypeId() + "')";
 		try {
 			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+			if(stm.getGeneratedKeys().next()) {
+				t.setId(stm.getGeneratedKeys().getInt(1));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.happyweekend.connection.ConnectionManager;
 import com.happyweekend.dao.PersonDao;
+import com.happyweekend.enumarator.PersonTypeEnum;
 import com.happyweekend.models.Person;
 import com.happyweekend.models.PersonType;
 import com.happyweekend.service.interfaces.ILoginService;
@@ -33,8 +34,9 @@ public class PersonService implements IPersonService{
 	@Override
 	public void save(Person person, ILoginService service) {
 		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
-
+		person.setPersonTypeId(PersonTypeEnum.EVENT_MANAGER.getValue());
 		dao.save(person);
+		person.getLogin().setId(person.getId());
 		service.save(person.getLogin());
 
 	}

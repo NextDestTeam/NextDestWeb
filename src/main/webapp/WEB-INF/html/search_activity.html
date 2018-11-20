@@ -38,8 +38,8 @@
 
             th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
 
-    <link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />
-    <link rel="stylesheet"  th:href="@{/resources/css/activity_form.css}"/>
+    <!--<link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />-->
+    <link rel="stylesheet"  th:href="@{/resources/css/search_activity.css}"/>
 
 </head>
 <body>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="submit" class="btn btn-primary">Save Activity</button>
+                        <button type="submit" class="btn btn-primary">Search Activity</button>
                     </div>
                 </div>
                 <!--<div class="form-actions text-center">
@@ -87,13 +87,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="line :${results}">
-                <th scope="row" th:text="${line.count}">1</th>
+            <tr th:each="line,stat :${results}">
+                <th scope="row" th:text="${stat.count}">1</th>
                 <td th:text="${line.name}">Mark</td>
                 <td th:text="${line.shortDescription}">Otto</td>
                 <td th:text="${line.location}">@mdo</td>
                 <td th:text="${line.activityType.name}">Otto</td>
-                <td><a th:href="@{activity/id/}+line.id" class="badge badge-light">Light</a></td>
+                <td><a th:href="@{activity/id/line.id}" class="badge badge-light">See/Edit</a></td>
             </tr>
 
             </tbody>

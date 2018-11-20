@@ -85,13 +85,14 @@
 				class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 			<property name="paramName" value="locale" />
 		</bean>
+		<bean class="com.happyweekend.spring.controllers.LoginController">
+		</bean>
 	</mvc:interceptors>
 
 	
 	<mvc:view-controller path="/" view-name="index" />
 	<mvc:resources mapping="/webjars/**" location="/webjars/"/>
 	<mvc:resources mapping="/resources/**" location="/resources/" />
-
 
 	
 </beans>

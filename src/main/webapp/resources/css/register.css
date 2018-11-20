@@ -20,6 +20,14 @@ body{
     margin-left: 30px;
     margin-right: 30px;
 }
+.btn{
+    margin:10px;
+}
+
+.card{
+    background-color: #966c6c4d;
+}
+
 /*
 img.blur {
     filter: blur(20px);

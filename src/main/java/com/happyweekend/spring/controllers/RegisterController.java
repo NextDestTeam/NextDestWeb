@@ -46,7 +46,7 @@ public class RegisterController {
 		service.save(registerFormToPerson(form),loginService);
 
 
-		return new ModelAndView("redirect:/index.html");
+		return new ModelAndView("redirect:/login.html");
 
 		
 	}

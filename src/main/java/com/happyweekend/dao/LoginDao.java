@@ -8,12 +8,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.happyweekend.models.Login;
+import sun.rmi.log.LogInputStream;
 
 public class LoginDao implements Dao<Login> {
 	Connection connection;
 
 	public LoginDao(Connection connection) {
 		this.connection = connection;
+	}
+
+
+	public Login get(Login login) {
+		ResultSet rs;
+		String query = "SELECT * FROM LOGIN WHERE login_name LIKE'" + login.getLoginName() + "'"+
+				" AND PASSWORD LIKE '"+login.getPassword() +"'";
+		Statement stm;
+		try {
+			stm = this.connection.createStatement();
+			rs = stm.executeQuery(query);
+			while(rs.next()) {
+				login.setId(rs.getInt("id"));
+				login.setLoginName(rs.getString("login_name"));
+				login.setPassword(rs.getString("password"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return login;
 	}
 	
 	@Override
@@ -60,8 +82,8 @@ public class LoginDao implements Dao<Login> {
 	@Override
 	public void save(Login t) {
 		Statement stm;
-		String query = "INSERT INTO login(id, login_name, password)"
-					 + "values(default, '"
+		String query = "INSERT INTO login(id,person_id, login_name, password)"
+					 + "values(default,"+t.getId()+", '"
 					 + t.getLoginName() + "', '"
 					 + t.getPassword() + "')";
 		try {
