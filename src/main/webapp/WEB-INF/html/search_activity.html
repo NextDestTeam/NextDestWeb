@@ -111,7 +111,7 @@
                 <td th:text="${line.shortDescription}">Otto</td>
                 <td th:text="${line.location}">@mdo</td>
                 <td th:text="${line.activityType.name}">Otto</td>
-                <td><a th:href="@{activity/id/{id}(id=${line.id})}" class="badge badge-info">See/Edit</a></td>
+                <td><a th:href="@{/activity/id/{id}(id=${line.id})}" class="badge badge-info">See/Edit</a></td>
             </tr>
 
             </tbody>
