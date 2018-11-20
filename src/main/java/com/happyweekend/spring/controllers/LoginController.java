@@ -32,19 +32,22 @@ public class LoginController extends HandlerInterceptorAdapter {
                              HttpServletResponse response,
                              Object controller) throws Exception {
 
-        String uri = request.getRequestURI();
-        if(uri.endsWith("login")||uri.endsWith("register")
-                ||uri.matches(".*/resources.*")
-                ||uri.matches(".*/webjars.*")){
-            return true;
-        }
-
-        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
-            return true;
-        }
-
-        response.sendRedirect("/login");
-        return false;
+        //TODO REMOVE THIS
+        return true;
+        //TODO UNCOMENT THIS
+//        String uri = request.getRequestURI();
+//        if(uri.endsWith("login")||uri.endsWith("register")
+//                ||uri.matches(".*/resources.*")
+//                ||uri.matches(".*/webjars.*")){
+//            return true;
+//        }
+//
+//        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
+//            return true;
+//        }
+//
+//        response.sendRedirect("/login");
+//        return false;
     }
 
     @GetMapping(path = "/login")

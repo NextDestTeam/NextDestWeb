@@ -42,7 +42,7 @@ public class ActivityForm {
     private String imageName;
     private List<PersonActivityComment> comments;
     private List<Reaction> reactions;
-    private byte[] imageBytes;
+    private String imageBytes;
 
     public ActivityForm(){
 
@@ -182,11 +182,11 @@ public class ActivityForm {
         return reactions;
     }
 
-    public void setImageBytes(byte[] imageBytes) {
+    public void setImageBytes(String imageBytes) {
         this.imageBytes = imageBytes;
     }
 
-    public byte[] getImageBytes() {
+    public String getImageBytes() {
         return imageBytes;
     }
 }

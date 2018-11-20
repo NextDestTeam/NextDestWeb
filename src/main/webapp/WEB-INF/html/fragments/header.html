@@ -32,7 +32,7 @@
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>-->
     <script
-            th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+            th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js" ></script>-->
     <script
 
@@ -48,15 +48,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">My project</a>
+            <a class="navbar-brand" href="#">Happy Weekend</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li th:classappend="${module == 'home' ? 'active' : ''}">
-                    <a href="#" th:href="@{/}">Home</a>
+                <li th:classappend="${'active'}">
+                    <a href="#" th:href="@{#}">Home</a>
                 </li>
-                <li th:classappend="${module == 'tasks' ? 'active' : ''}">
-                    <a href="#" th:href="@{/task}">Tasks</a>
+                <li th:classappend="${ 'active'}">
+                    <a href="#" th:href="@{/activity}">New Activity</a>
+                </li>
+                <li th:classappend="${'active'}">
+                    <a href="#" th:href="@{/activity/search}">Search Activity</a>
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">

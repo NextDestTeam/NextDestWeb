@@ -4,18 +4,18 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  
 
-  
-  <!-- Spring configuration -->
-    <servlet>
+    <!--<servlet>
         <servlet-name>testServlet</servlet-name>
         <servlet-class>com.happyweekend.spring.TestServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>testServlet</servlet-name>
         <url-pattern>*.test</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>-->
+  
+  <!-- Spring configuration -->
+
      <servlet>
        <servlet-name>dispatcherServlet</servlet-name>
        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>

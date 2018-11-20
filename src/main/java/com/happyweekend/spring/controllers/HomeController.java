@@ -30,6 +30,7 @@ public class HomeController {
     }
 
     @GetMapping("home")
+    @RequestMapping("/")
     public ModelAndView index(){
         return new ModelAndView("index.html");
     }

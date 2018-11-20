@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.Base64;
 import java.util.Date;
 
 
@@ -84,7 +85,7 @@ public class ActivityController {
 
     }
 
-    private byte[] loadImage(String imageName) {
+    private String loadImage(String imageName) {
 
         try {
             File serverFile = new File(IMAGES_PATH+ imageName);
@@ -95,7 +96,8 @@ public class ActivityController {
             byte[]  bytes = new byte[(int)serverFile.length()];
 
             fileInputStream.read(bytes);
-        return bytes;
+            //data:image/png;
+            return new String("data:image/png;"+Base64.getDecoder().decode(bytes));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -9,7 +9,7 @@ body{
 .img-fluid. {
     max-width: 100%;
     height:auto;
-    margin:15px !important;
+    margin:30px !important;
 }
 
 .pull-left.meta{
@@ -47,3 +47,6 @@ body{
     padding:40px;
 }
 
+.image-container{
+    padding:20px;
+}
