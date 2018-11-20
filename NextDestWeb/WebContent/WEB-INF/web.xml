@@ -4,4 +4,14 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>jspPersona</display-name>
+    <servlet-name>jspPersona</servlet-name>
+    <jsp-file>/jspPersona.jsp</jsp-file>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>jspPersona</servlet-name>
+    <url-pattern>/jPersona</url-pattern>
+  </servlet-mapping>
 </web-app>
