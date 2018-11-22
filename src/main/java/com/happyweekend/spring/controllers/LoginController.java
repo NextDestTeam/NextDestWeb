@@ -78,6 +78,7 @@ public class LoginController extends HandlerInterceptorAdapter {
 
         session.setAttribute(USER_LOGIN_SESSION,login);
 
+
         return "redirect:/";
     }
 

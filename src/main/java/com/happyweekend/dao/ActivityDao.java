@@ -91,6 +91,7 @@ public class ActivityDao implements Dao<Activity>{
 			rs = stm.executeQuery(query);
 			while(rs.next()) {
 				Activity activity = new Activity();
+				activity.setId(rs.getInt("id"));
 				activity.setName(rs.getString("name"));
 				activity.setLocation(rs.getString("location"));
 				activity.setDescription(rs.getString("description"));
