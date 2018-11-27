@@ -3,6 +3,7 @@ package com.happyweekend.connection;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
@@ -21,13 +22,17 @@ public class ConnectionManager {
 			if ( cxt != null )
 			{
 
-					DataSource ds = (DataSource) cxt.lookup("java:jboss/PostgresXA");
-					if (ds == null) {
-						this.strStatus = "Error with the creation of the datasource";
-					} else {
+				Context ctx = new InitialContext();
 
-						this.connection = ds.getConnection();
-					}
+				DataSource ds = (DataSource) ctx.lookup("java:comp/env/jdbc/PostgresXA");;
+
+
+				if (ds == null) {
+					this.strStatus = "Error with the creation of the datasource";
+				} else {
+
+					this.connection = ds.getConnection();
+				}
 
 			}
 		}

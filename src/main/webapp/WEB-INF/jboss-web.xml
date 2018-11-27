@@ -1,3 +1,8 @@
 <jboss-web>
     <context-root>happy</context-root>
+    <resource-ref>
+        <res-ref-name>jdbc/PostgresXA</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <jndi-name>java:jboss/PostgresXA</jndi-name>
+    </resource-ref>
 </jboss-web>
