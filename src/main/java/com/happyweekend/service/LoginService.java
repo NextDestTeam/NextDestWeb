@@ -29,7 +29,9 @@ public class LoginService implements ILoginService{
 
 		encryptPassword(login);
 		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
-		return dao.get(login).getId()>0;
+
+        Login l = dao.get(login);
+		return (l!=null && l.getId()>0);
 	}
 
 

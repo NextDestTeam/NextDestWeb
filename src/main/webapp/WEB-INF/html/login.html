@@ -60,6 +60,8 @@
                 </div>
             </div>
             <div class="card-body">
+                
+                <!--/*@thymesVar id="loginForm" type="com.happyweekend.spring.form.LoginForm"*/-->
                 <form name="f" th:object="${loginForm}" th:action="@{/login}" method="post">
                     <fieldset>
                         <div class="form-group">

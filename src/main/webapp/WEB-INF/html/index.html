@@ -39,23 +39,24 @@
             th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
 </head>
 <body>
-<!--<div th:replace="fragments/header :: header">-->
-    <div class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">Happy Weekend</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav mr-auto">
-                <!--<div class="nav-collapse collapse">-->
+    <div th:replace="fragments/header :: header">
+        <!--<div class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Happy Weekend</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav mr-auto">
+                    &lt;!&ndash;<div class="nav-collapse collapse">&ndash;&gt;
 
-                <li class="nav-item active"><a class="nav-link"  th:href="@{/}">Home</a></li>
-                <li class="nav-item active"><a class="nav-link" th:href="@{/activity}">New Activity</a></li>
-                <li class="nav-item active"><a class="nav-link" th:href="@{/activity/search}">Search Activity</a></li>
+                    <li class="nav-item active"><a class="nav-link"  th:href="@{/}">Home</a></li>
+                    <li class="nav-item active"><a class="nav-link" th:href="@{/activity}">New Activity</a></li>
+                    <li class="nav-item active"><a class="nav-link" th:href="@{/activity/search}">Search Activity</a></li>
 
-                <!--</div>-->
-            </ul>
-        </div>
+                    &lt;!&ndash;</div>&ndash;&gt;
+                </ul>
+            </div>
+        </div>-->
     </div>
     <div class="container">
         <div class="hero-unit" th:each="activity,estat :${activities}">

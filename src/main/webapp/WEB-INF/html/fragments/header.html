@@ -40,36 +40,35 @@
 
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+<div class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="header">
+    <a class="navbar-brand" th:href="@{/}">
+        <img width="60" height="30" class="d-inline-block align-top" th:src="@{/resources/images/logo_wide.png}" name="logo" id="logo"  alt="Happy Weekend">
+        Happy Weekend
+    </a>
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Happy Weekend</a>
+
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li th:classappend="${'active'}">
-                    <a href="#" th:href="@{#}">Home</a>
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item " th:classappend="${'active'}">
+                    <a class="nav-link" href="#" th:href="@{/}">Home</a>
                 </li>
-                <li th:classappend="${ 'active'}">
-                    <a href="#" th:href="@{/activity}">New Activity</a>
+                <li class="nav-item " th:classappend="${ 'active'}">
+                    <a class="nav-link" href="#" th:href="@{/activity}">New Activity</a>
                 </li>
-                <li th:classappend="${'active'}">
-                    <a href="#" th:href="@{/activity/search}">Search Activity</a>
+                <li class="nav-item " th:classappend="${'active'}">
+                    <a class="nav-link" href="#" th:href="@{/activity/search}">Search Activity</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li th:if="${!T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
-                    <a href="/signin" th:href="@{/signin}">
+            <ul class="nav navbar-nav navbar-right mr-0">
+                <li class="nav-item " th:if="${!T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
+                    <a class="nav-link" href="/signin" th:href="@{/signin}">
                         <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Sign in
                     </a>
                 </li>
-                <li th:if="${!T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
-                    <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+                <li  th:if="${T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
+                    <a class="btn btn-primary" href="/logout" th:href="@{#}" onclick="$('#form').submit();">
                         <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
                     </a>
                     <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
