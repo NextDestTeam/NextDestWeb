@@ -7,5 +7,36 @@
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
       <jdbc-url>jdbc:postgresql://localhost:5432/happyweekend</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="META-INF:hibernate.cfg.xml/Hibernate" uuid="ce80c2d8-f3f4-4979-9ab3-96f2481f77fc">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/src/main/java/META-INF/hibernate.cfg.xml</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+    </data-source>
+    <data-source source="LOCAL" name="jdbc" uuid="900aa3bd-0064-40dd-b5de-51152bc381d7">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/src/main/resources/jdbc.properties</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc\:postgresql\://localhost\:5432/happyweekend</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="jdbc" uuid="733cddff-9ec3-4743-afa3-aa84f45846fa">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/src/test/resources/jdbc.properties</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc\:postgresql\://localhost\:5432/happyweekend</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="java:jboss/PostgresXA" uuid="6bbccd53-2b7a-4b8e-9132-b28b3924b3b4">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/src/main/java/META-INF/context.xml</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://localhost:5432/happyweekend</jdbc-url>
+    </data-source>
   </component>
 </project>
