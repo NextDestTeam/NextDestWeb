@@ -24,7 +24,7 @@ import javax.validation.Valid;
 public class LoginController extends HandlerInterceptorAdapter {
 
 
-    LoginService loginService = new LoginService();
+    private LoginService loginService = new LoginService();
 
     public static final String USER_LOGIN_SESSION = "session-user";
 
@@ -85,7 +85,7 @@ public class LoginController extends HandlerInterceptorAdapter {
     @RequestMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:loginForm?logout";
+        return "redirect:/login";
     }
 
     public static boolean isAuthenticated(){

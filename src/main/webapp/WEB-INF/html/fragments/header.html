@@ -61,17 +61,25 @@
                     <a class="nav-link" href="#" th:href="@{/activity/search}">Search Activity</a>
                 </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right mr-0">
-                <li class="nav-item " th:if="${!T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
-                    <a class="nav-link" href="/signin" th:href="@{/signin}">
-                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Sign in
-                    </a>
-                </li>
-                <li  th:if="${T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
-                    <a class="btn btn-primary" href="/logout" th:href="@{#}" onclick="$('#form').submit();">
-                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
-                    </a>
-                    <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
+            <ul class="nav navbar-nav navbar-right mr-4">
+                <li class="nav-item dropdown" >
+                    <a class="nav-link navbar-toggler-icon" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"></a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="col-sm-12">
+                            <div class="text-center">
+                                <a class="dropdown-item" href="/profile" th:href="@{/profile}">Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <div class="dropdown-item">
+                                    <a class="btn btn-primary" href="/login" th:href="@{/login}" th:if="${!T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
+                                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Sign in
+                                    </a>
+                                    <a class="btn btn-primary" href="/logout" th:href="@{/logout}" th:if="${T(com.happyweekend.spring.controllers.LoginController).isAuthenticated()}">
+                                        <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
