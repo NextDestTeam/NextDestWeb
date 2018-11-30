@@ -31,7 +31,7 @@ public class LoginService implements ILoginService{
 		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
 
         Login l = dao.get(login);
-		return (l!=null && l.getId()>0);
+		return (l.getId()>0 && l!=null);
 	}
 
 
@@ -45,10 +45,24 @@ public class LoginService implements ILoginService{
 		
 	}
 
+	@Override
+	public Login loadByUsername(String username) {
+		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
+
+		return dao.loadByUsername(username);
+
+	}
+
 	private void encryptPassword(Login login) {
 		login.setPassword(new String(
 				DigestUtils.md5DigestAsHex(login.getPassword().getBytes()).toUpperCase()
 		));
+	}
+
+	public String getEncryptedPassword(String password){
+		return new String(
+				DigestUtils.md5DigestAsHex(password.getBytes()).toUpperCase()
+		);
 	}
 
 }

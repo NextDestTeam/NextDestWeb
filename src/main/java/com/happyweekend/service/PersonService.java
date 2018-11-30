@@ -31,12 +31,20 @@ public class PersonService implements IPersonService{
 		return dao.get(id);
 	}
 
+
+	public void save(Person person) {
+		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
+		person.setPersonTypeId(PersonTypeEnum.EVENT_MANAGER.getValue());
+		dao.save(person);
+
+	}
+
 	@Override
 	public void save(Person person, ILoginService service) {
 		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
 		person.setPersonTypeId(PersonTypeEnum.EVENT_MANAGER.getValue());
 		dao.save(person);
-		person.getLogin().setId(person.getId());
+		person.getLogin().setPersonId(person.getId());
 		service.save(person.getLogin());
 
 	}

@@ -30,6 +30,7 @@ public class LoginDao implements Dao<Login> {
 				login.setId(rs.getInt("id"));
 				login.setLoginName(rs.getString("login_name"));
 				login.setPassword(rs.getString("password"));
+				login.setPersonId(rs.getInt("person_id"));
 			}
 
 		} catch (SQLException e) {
@@ -51,6 +52,7 @@ public class LoginDao implements Dao<Login> {
 			login.setId(rs.getInt("id"));
 			login.setLoginName(rs.getString("login_name"));
 			login.setPassword(rs.getString("password"));
+			login.setPersonId(rs.getInt("person_id"));
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -72,6 +74,7 @@ public class LoginDao implements Dao<Login> {
 			login.setId(rs.getInt("id"));
 			login.setLoginName(rs.getString("login_name"));
 			login.setPassword(rs.getString("password"));
+			login.setPersonId(rs.getInt("person_id"));
 			logins.add(login);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -83,7 +86,7 @@ public class LoginDao implements Dao<Login> {
 	public void save(Login t) {
 		Statement stm;
 		String query = "INSERT INTO login(id,person_id, login_name, password)"
-					 + "values(default,"+t.getId()+", '"
+					 + "values(default,"+t.getPersonId()+", '"
 					 + t.getLoginName() + "', '"
 					 + t.getPassword() + "')";
 		try {
@@ -122,4 +125,23 @@ public class LoginDao implements Dao<Login> {
 		}
 	}
 
+	public Login loadByUsername(String username) {
+		Login login = new Login();
+		ResultSet rs;
+		String query = "SELECT * FROM LOGIN WHERE login_name='" + username + "'";
+		Statement stm;
+		try {
+			stm = this.connection.createStatement();
+			rs = stm.executeQuery(query);
+			rs.next();
+			login.setId(rs.getInt("id"));
+			login.setLoginName(rs.getString("login_name"));
+			login.setPassword(rs.getString("password"));
+			login.setPersonId(rs.getInt("person_id"));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return login;
+	}
 }

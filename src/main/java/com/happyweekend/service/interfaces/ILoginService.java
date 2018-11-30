@@ -6,6 +6,7 @@ public interface ILoginService {
 	
 	public boolean validLogin(Login login);
 	public void save(Login login);
-	
 
+
+    Login loadByUsername(String username);
 }

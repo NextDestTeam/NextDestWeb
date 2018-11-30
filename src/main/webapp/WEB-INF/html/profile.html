@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title th:text="#{profile}">Profile</title>
+    <link rel='stylesheet' th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
+
+    <link rel="stylesheet" href="/resources/css/profile.css" th:href="@{/resources/css/profile.css}"/>
+
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/register_backgroound.jpg"></img>
+    <div class="card col-sm-6 offset-sm-3 text-center ">
+
+        <div class="card-body">
+            <!--/*@thymesVar id="personForm" type="com.happyweekend.spring.form.PersonForm"*/-->
+            <form th:object="${personForm}" name="personForm" th:action="@{/profile}" action="#" method="post">
+                <fieldset>
+            <!--<legend>Please Enter with Your Data</legend>-->
+                <div css="form-row">
+                    <div class="text-center">
+                        <img th:src="@{/resources/images/logo.png}" class="rounded" alt="Happy Weekend">
+                    </div>
+                </div>
+
+                <div class="form-row" >
+                    <div class="form-group col-md-12 " th:with="err=${#fields.hasErrors('firstName')}">
+
+                        <label for="firstName" class=" col-form-label">First name</label>
+                        <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-control " th:value="*{firstName}" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{firstName}">First Name Error</div>
+                    </div>
+                </div>
+                <div class="form-row" >
+                    <div class="form-group col-md-12" th:with="err=${#fields.hasErrors('lastName')}">
+                        <label for="lastName" class=" col-form-label">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-control " th:value="*{lastName}" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{lastName}">Last Name Error</div>
+                    </div>
+                </div>
+                <!--<div class="form-row form-group" >
+                    <div class="form-group col-md-12 " th:with="err=${#fields.hasErrors('personType')}">
+                        <label for="personTypeId" class="col-form-label">Person type</label>
+                        <select th:id="personTypeId" id="personTypeId" class="form-control custom-select custom-select-lg " th:field="*{personTypeId}"  th:value="*{personTypeId}">
+                            <option th:each="type : *{personTypeList}" th:value="${type.id}" th:text="${type.name}">Open this select menu</option>
+                        </select>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{personTypeId}">Person Type Error</div>
+                    </div>
+                </div>-->
+                <div class="form-row " >
+                    <div class="form-group col-md-12 " th:with="err=${#fields.hasErrors('email')}">
+                        <label for="email" class=" col-form-label">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Email" class="form-control  input-medium" th:value="*{email}" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{email}">Email Error</div>
+                    </div>
+                </div>
+                <div class="form-row" >
+                    <div class="form-group col-md-12 " th:with="err=${#fields.hasErrors('username')}">
+                        <label for="username"  class=" col-form-label">Username</label>
+                        <input type="text" id="username" name="username" class="form-control " placeholder="Username" disabled th:value="*{username}" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{username}">User Name Error</div>
+                    </div>
+                </div>
+                <div class="form-row " >
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('password') or #fields.hasGlobalErrors()}">
+                        <label for="password" class=" col-form-label">Password</label>
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control " th:value="*{password}" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{password}">Password Error</div>
+                        <div th:if="${err and #fields.hasGlobalErrors() and #fields.errors().size()==1 }" class="" th:attrappend="class=' invalid-feedback'" th:errors="${personForm}">Password Error</div>
+                    </div>
+                    <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('rePassword') or #fields.hasGlobalErrors()}">
+                        <label for="rePassword" class=" col-form-label">Re-type</label>
+                        <input type="password" id="rePassword" name="rePassword" class="form-control " placeholder="Re-type" th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{rePassword}">Password Error</div>
+                        <div th:if="${err and #fields.hasGlobalErrors() and #fields.errors().size()==1 }" class="" th:attrappend="class=' invalid-feedback'" th:errors="${personForm}">Password Error</div>
+                    </div>
+                </div>
+
+                <div class="form-actions text-center">
+                    <button type="submit" class="btn btn-primary" th:text="#{save}">Save</button>
+                </div>
+
+
+        </fieldset>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

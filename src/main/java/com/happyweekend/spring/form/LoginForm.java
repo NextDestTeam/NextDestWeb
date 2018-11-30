@@ -1,7 +1,11 @@
 package com.happyweekend.spring.form;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class LoginForm {
 
     @NotBlank

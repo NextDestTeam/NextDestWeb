@@ -4,6 +4,8 @@ import com.happyweekend.models.Login;
 import com.happyweekend.service.LoginService;
 import com.happyweekend.spring.form.LoginForm;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,22 +35,26 @@ public class LoginController extends HandlerInterceptorAdapter {
                              HttpServletResponse response,
                              Object controller) throws Exception {
 
+        if(request.getSession().getAttribute(USER_LOGIN_SESSION)==null) {
+
+            login(new LoginForm("l", "12345678"), null, request.getSession(), new BeanPropertyBindingResult(null,null));
+        }
         //TODO REMOVE THIS
-//        return true;
+        return true;
         //TODO UNCOMENT THIS
-        String uri = request.getRequestURI();
-        if(uri.endsWith("login")||uri.endsWith("register")
-                ||uri.matches(".*/resources.*")
-                ||uri.matches(".*/webjars.*")){
-            return true;
-        }
-
-        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
-            return true;
-        }
-
-        response.sendRedirect("login");
-        return false;
+//        String uri = request.getRequestURI();
+//        if(uri.endsWith("login")||uri.endsWith("register")
+//                ||uri.matches(".*/resources.*")
+//                ||uri.matches(".*/webjars.*")){
+//            return true;
+//        }
+//
+//        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
+//            return true;
+//        }
+//
+//        response.sendRedirect("login");
+//        return false;
     }
 
     @GetMapping(path = "/login")
@@ -75,6 +81,7 @@ public class LoginController extends HandlerInterceptorAdapter {
             result.addError(new ObjectError("loginForm","{Login incorrect}"));
             return "login.html?error";
         }
+        login = loginService.loadByUsername(login.getLoginName());
 
         session.setAttribute(USER_LOGIN_SESSION,login);
 

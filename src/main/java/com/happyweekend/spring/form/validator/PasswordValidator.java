@@ -7,7 +7,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 
-public class PasswordValidator implements ConstraintValidator<EqualPassword,RegisterForm> {
+public class PasswordValidator implements ConstraintValidator<EqualPassword,Object> {
 
     private String pass1;
     private String pass2;
@@ -19,8 +19,17 @@ public class PasswordValidator implements ConstraintValidator<EqualPassword,Regi
 
 
     @Override
-    public boolean isValid(RegisterForm registerForm, ConstraintValidatorContext constraintValidatorContext) {
-        boolean isValid = registerForm.getPassword().equals(registerForm.getRePassword());
+    public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
+        //boolean isValid = registerForm.getPassword().equals(registerForm.getRePassword());
+        boolean isValid = false;
+        try {
+            isValid = RegisterForm.class.getField(pass1).get(object)
+                    .equals(RegisterForm.class.getField(pass2).get(object));
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         return isValid;
 
