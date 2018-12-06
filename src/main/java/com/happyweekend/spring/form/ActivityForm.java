@@ -63,7 +63,7 @@ public class ActivityForm {
         this.name = activity.getName();
         this.location = activity.getLocation();
         this.price = activity.getPrice();
-        this.imageBytes = Base64.getEncoder().encodeToString(activity.getImage().getImage()).toUpperCase();
+        this.imageBytes = "data:image/png;base64, "+Base64.getEncoder().encodeToString(activity.getImage().getImage());
     }
 
     public Integer getId() {

@@ -18,7 +18,6 @@ import javax.validation.Valid;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Date;
 import java.util.List;
 
 
@@ -121,8 +120,9 @@ public class ActivityController {
 
         form.setImageName(file.getOriginalFilename());
 
+        byte[] bytes = null;
         try {
-            form.setImageBytes(Base64.getEncoder().encodeToString(file.getBytes()));
+            bytes = file.getBytes();
             fileOk = true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -135,7 +135,7 @@ public class ActivityController {
         form.setPersonId(((Login)session.getAttribute(LoginController.USER_LOGIN_SESSION)).getPersonId());
 
 
-        service.save(formToModel(form));
+        service.save(formToModel(form,bytes));
         
 
         return new ModelAndView("redirect:/");
@@ -153,7 +153,7 @@ public class ActivityController {
     }
 
 
-    private Activity formToModel(ActivityForm form) {
+    private Activity formToModel(ActivityForm form, byte[] bytes) {
         Activity a = new Activity();
         a.setId(form.getId());
         a.setDescription(form.getDescription());
@@ -172,8 +172,7 @@ public class ActivityController {
         //Creating Image to put in database model
         Image image = new Image();
         image.setName(form.getImageName());
-        if(form.getImageBytes()!=null)
-            image.setImage(form.getImageBytes().getBytes());
+        image.setImage(bytes);
         a.setImage(image);
         return a;
     }
