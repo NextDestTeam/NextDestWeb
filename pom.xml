@@ -289,7 +289,7 @@
          <artifactId>jackson-databind</artifactId>
          <version>${jackson-databind.version}</version>
       </dependency>
-      <!-- Imgscalr is an simple and efficient best-practices image-scaling and manipulation library implemented in pure Java.
+      <!-- Imgscalr is an simple and efficient best-practices imageId-scaling and manipulation library implemented in pure Java.
       Used for manipulate the user avatar.
       https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
       <dependency>

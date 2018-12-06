@@ -14,7 +14,8 @@ public class Activity {
 	private Date date;
 	private int activityTypeId;
 	private ActivityType activityType = new ActivityType();
-	private String image;
+	private Integer imageId;
+	private Image image;
 	
 	public Integer getId() {
 		return id;
@@ -90,11 +91,19 @@ public class Activity {
 		this.activityTypeId = activityTypeId;
 	}
 
-    public String getImage() {
-        return image;
+    public Integer getImageId() {
+        return imageId;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
     }
+
+	public Image getImage() {
+		return image;
+	}
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
 }

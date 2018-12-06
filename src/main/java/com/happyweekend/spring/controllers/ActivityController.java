@@ -1,7 +1,8 @@
 package com.happyweekend.spring.controllers;
 
 import com.happyweekend.models.Activity;
-import com.happyweekend.models.PersonActivityComment;
+import com.happyweekend.models.Image;
+import com.happyweekend.models.Login;
 import com.happyweekend.service.*;
 import com.happyweekend.spring.form.ActivityForm;
 import com.happyweekend.spring.form.ActivitySearchForm;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.ArrayList;
@@ -25,7 +27,6 @@ public class ActivityController {
 
 
     private static final String FORM_NAME = "activityForm";
-    private static final String IMAGES_PATH = "/home/lucas/workspace/NextDestApp/NextDestWeb/activity_img/";
 
     ActivityService service = new ActivityService();
     ActivityTypeService activityTypeService = new ActivityTypeService();
@@ -35,10 +36,11 @@ public class ActivityController {
 
 
     @GetMapping(path = "activity")
-    public ModelAndView index(){
+    public ModelAndView index(HttpSession session){
 
         ActivityForm form = new ActivityForm();
         form.setActivityTypeList(activityTypeService.getActivityTypes());
+        form.setPersonId(((Login)session.getAttribute(LoginController.USER_LOGIN_SESSION)).getPersonId());
 
         return new ModelAndView("activity_form.html",FORM_NAME,form);
     }
@@ -52,7 +54,8 @@ public class ActivityController {
             form.setComments(commentService.getByActivity(id));
             form.setActivityTypeList(activityTypeService.getActivityTypes());
             form.setReactions(reactionService.getByActivity(id));
-            form.setImageBytes(loadImage(form.getImageName()));
+            //form.setImageBytes(loadImage(form.getImageName()));
+            form.setImageBytes(form.getImageBytes());
             ModelAndView modelAndView = new ModelAndView("activity_form.html",FORM_NAME,form);
             //TODO get peson id
             PersonActivityCommentForm commentForm = new PersonActivityCommentForm();
@@ -90,47 +93,47 @@ public class ActivityController {
     public List<ActivityForm> getUserActivities(){
         List<Activity> activities = service.getActivities();
         List<ActivityForm> list = new ArrayList<>();
+        ImageService imageService = new  ImageService();
         for(Activity a : activities) {
+
+            if(a.getImageId()>0 && a.getImageId()!=null) {
+
+                a.setImage(imageService.get(a.getId()));
+                a.setImageId(a.getImage().getId());
+            }
             ActivityForm form = new ActivityForm(a);
 
-            form.setImageBytes(loadImage(form.getImageName()));
+
+            //form.setImageBytes(loadImage(form.getImageName()));
             list.add(form);
         }
         return list;
-    }
-
-    private String loadImage(String imageName) {
-
-        try {
-            File serverFile = new File(IMAGES_PATH+ imageName);
-            FileInputStream fileInputStream = null;
-
-                fileInputStream = new FileInputStream(serverFile);
-
-            byte[]  bytes = new byte[(int)serverFile.length()];
-
-            fileInputStream.read(bytes);
-            String img = Base64.getEncoder().encodeToString(bytes).toUpperCase();
-            //data:image/png;
-            return new String("data:image/png;"+img);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @PostMapping(path = "activity")
     public ModelAndView save(
             @RequestParam("file") MultipartFile file,
             @ModelAttribute(FORM_NAME) @Valid ActivityForm form,
+            HttpSession session,
             BindingResult result){
 
-        if(result.hasErrors() || !checkFile(file,form)){
+        boolean fileOk = false;
+
+        form.setImageName(file.getOriginalFilename());
+
+        try {
+            form.setImageBytes(Base64.getEncoder().encodeToString(file.getBytes()));
+            fileOk = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(result.hasErrors() || !fileOk){
             form.setActivityTypeList(activityTypeService.getActivityTypes());
             return new ModelAndView("activity_form.html",FORM_NAME,form);
         }
+        form.setPersonId(((Login)session.getAttribute(LoginController.USER_LOGIN_SESSION)).getPersonId());
+
 
         service.save(formToModel(form));
         
@@ -149,40 +152,6 @@ public class ActivityController {
         return "redirect:";
     }
 
-    private boolean checkFile(MultipartFile file, ActivityForm form) {
-        if (!file.isEmpty()) {
-            try {
-                byte[] bytes = file.getBytes();
-
-                // Creating the directory to store file
-                File dir = new File(IMAGES_PATH);
-                if (!dir.exists())
-                    dir.mkdirs();
-
-                String newName = String.valueOf((new Date()).getTime())+
-                        file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."),file.getOriginalFilename().length());
-
-                form.setImageName(newName);
-                // Create the file on server
-                File serverFile = new File(dir.getAbsolutePath()
-                        + File.separator + newName);
-
-                BufferedOutputStream stream = new BufferedOutputStream(
-                        new FileOutputStream(serverFile));
-                stream.write(bytes);
-                stream.close();
-
-
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
 
     private Activity formToModel(ActivityForm form) {
         Activity a = new Activity();
@@ -191,15 +160,21 @@ public class ActivityController {
         a.setLocation(form.getLocation());
         a.setShortDescription(form.getShortDescription());
 
-        //TODO GET PERSON FROM SESSION
-        a.setPersonId(1);
+        a.setPersonId(form.getPersonId());
         a.setActivityType(activityTypeService.getActivityTypes().stream()
                 .filter(x->x.getId()==form.getActivityTypeId()).findFirst().get());
         a.setActivityTypeId(form.getActivityTypeId());
         a.setName(form.getName());
         a.setPrice(form.getPrice());
         a.setDate(form.getDate());
-        a.setImage(form.getImageName());
+        a.setImageId(form.getImageId());
+
+        //Creating Image to put in database model
+        Image image = new Image();
+        image.setName(form.getImageName());
+        if(form.getImageBytes()!=null)
+            image.setImage(form.getImageBytes().getBytes());
+        a.setImage(image);
         return a;
     }
 

@@ -6,10 +6,10 @@ import com.happyweekend.models.ActivityType;
 import com.happyweekend.models.PersonActivityComment;
 import com.happyweekend.models.Reaction;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.context.annotation.Bean;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +45,7 @@ public class ActivityForm {
     private List<PersonActivityComment> comments;
     private List<Reaction> reactions;
     private String imageBytes;
+    private Integer imageId;
 
     public ActivityForm(){
 
@@ -58,10 +59,11 @@ public class ActivityForm {
         this.shortDescription = activity.getShortDescription();
         this.id = activity.getId();
         this.personId = activity.getPersonId();
-        this.imageName = activity.getImage();
+        this.imageId = activity.getImageId();
         this.name = activity.getName();
         this.location = activity.getLocation();
         this.price = activity.getPrice();
+        this.imageBytes = Base64.getEncoder().encodeToString(activity.getImage().getImage()).toUpperCase();
     }
 
     public Integer getId() {
@@ -190,5 +192,13 @@ public class ActivityForm {
 
     public String getImageBytes() {
         return imageBytes;
+    }
+
+    public Integer getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Integer imageId) {
+        this.imageId = imageId;
     }
 }

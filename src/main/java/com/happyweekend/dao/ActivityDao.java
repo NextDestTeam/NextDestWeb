@@ -25,7 +25,7 @@ public class ActivityDao implements Dao<Activity>{
 
         ResultSet rs;
         String query = "SELECT id, name, short_description, description, location, price, person_id, \n" +
-                "       activity_type, date,image\n" +
+                "       activity_type, date,image_id\n" +
                 "  FROM activity\n" +
                 "  where name like '%"+
                 (activity.getName()==null?"":activity.getName())+
@@ -75,7 +75,7 @@ public class ActivityDao implements Dao<Activity>{
         activity.setPrice(rs.getInt("price"));
         activity.setActivityTypeId(rs.getInt("activity_type"));
         activity.setDate(rs.getDate("date"));
-        activity.setImage(rs.getString("image"));
+        activity.setImageId(rs.getInt("image_id"));
 
         return activity;
     }
@@ -100,7 +100,7 @@ public class ActivityDao implements Dao<Activity>{
 				activity.setPrice(rs.getInt("price"));
 				activity.setActivityTypeId(rs.getInt("activity_type"));
                 activity.setDate(rs.getDate("date"));
-                activity.setImage(rs.getString("image"));
+                activity.setImageId(rs.getInt("image_id"));
 				activities.add(activity);
 			}
 		} catch (SQLException e) {
@@ -113,7 +113,7 @@ public class ActivityDao implements Dao<Activity>{
 	public void save(Activity t) {
 		Statement stm;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String query = String.format("INSERT INTO ACTIVITY(id, name, short_description, description, location, price, person_id,activity_type,date,image)"
+		String query = "INSERT INTO ACTIVITY(id, name, short_description, description, location, price, person_id,activity_type,date,image_id)"
 					 + "values(default, '"
 					 + t.getName() + "', '"
 					 + t.getShortDescription() + "', '"
@@ -121,9 +121,9 @@ public class ActivityDao implements Dao<Activity>{
 					 + t.getLocation() + "', '"
 					 + t.getPrice() + "', '"
 					 + t.getPersonId() + "', '"
-					 + t.getActivityTypeId()+ "', TIMESTAMP '"
-                     + sdf.format(t.getDate())+ "', %s)",
-                (t.getImage()==null || t.getImage().equals("")?"null":"'"+t.getImage()+"'"));
+					 + t.getActivityTypeId()+ "', TIMESTAMP "
+                     + String.format("'%s',",sdf.format(t.getDate()))+
+					+ t.getImageId()+")";
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
@@ -146,7 +146,7 @@ public class ActivityDao implements Dao<Activity>{
 					 + "person_id='" + t.getPersonId() +"',"
                      + "activityType='"+t.getActivityType().getId()+ "', "
                      + "date = TIMESTAMP '"+sdf.format(t.getDate())+ "', "
-                     + "image = '"+t.getImage()+ "')";
+                     + "image_id = '"+t.getImageId()+ "')";
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);

@@ -5,13 +5,24 @@ import com.happyweekend.dao.ActivityTypeDao;
 import com.happyweekend.models.ActivityType;
 import com.happyweekend.service.interfaces.IActivityTypeService;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ActivityTypeService implements IActivityTypeService {
     @Override
     public List<ActivityType> getActivityTypes() {
-        ActivityTypeDao dao = new ActivityTypeDao(ConnectionManager.getInstance().connect());
-        return dao.getAll();
+        Connection con = ConnectionManager.getInstance().connect();
+        try {
+            ActivityTypeDao dao = new ActivityTypeDao(con);
+            return dao.getAll();
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
