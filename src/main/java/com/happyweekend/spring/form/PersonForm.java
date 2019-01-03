@@ -6,10 +6,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.cglib.core.Local;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -37,14 +39,17 @@ public class PersonForm {
     @Size(min = 8,max = 20)
     private String rePassword;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Birthday
-    private Date birthday;
+    private LocalDate birthday;
 
     @Getter@Setter
     private List<PersonType> personTypeList;
     @Getter@Setter
     private int personTypeId;
+
+    @Getter@Setter
+    private String photo;
 
     public String getEmail() {
         return email;
@@ -94,11 +99,11 @@ public class PersonForm {
         this.lastName = lastName;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

@@ -1,10 +1,13 @@
 package com.happyweekend.spring.form;
 
+import com.happyweekend.spring.form.validator.annotation.Birthday;
 import com.happyweekend.spring.form.validator.annotation.EqualPassword;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 
 @EqualPassword(pass1 = "password",pass2 = "rePassword")
@@ -25,6 +28,12 @@ public class RegisterForm {
     @NotBlank
     @Size(min = 8,max = 20)
     private String rePassword;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    //@Birthday
+    private Date birthday;
+
+    private String photo;
 
     public String getEmail() {
         return email;
@@ -72,6 +81,22 @@ public class RegisterForm {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 }
 

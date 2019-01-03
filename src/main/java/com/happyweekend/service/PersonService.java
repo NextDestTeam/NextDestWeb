@@ -1,5 +1,7 @@
 package com.happyweekend.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,42 +12,56 @@ import com.happyweekend.models.Person;
 import com.happyweekend.models.PersonType;
 import com.happyweekend.service.interfaces.ILoginService;
 import com.happyweekend.service.interfaces.IPersonService;
+import com.happyweekend.service.interfaces.IPersonTypeService;
 
 public class PersonService implements IPersonService{
 	
-	private static List<Person> persons = new ArrayList<>();
-
-	@Override
+		@Override
 	public List<PersonType> getPersonTypes() {
-		List<PersonType> personTypes = new ArrayList<>();
-		PersonType p1 = new PersonType();
-		PersonType p2 = new PersonType();
-		personTypes.add(p1);
-		personTypes.add(p2);
-		return personTypes;
+
+			IPersonTypeService personTypeService = new PersonTypeService();
+			return personTypeService.getAll();
 	}
 
 	@Override
 	public Person get(int id) {
-		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
-		return dao.get(id);
+		Connection con = ConnectionManager.getInstance().connect();
+		PersonDao dao = new PersonDao(con);
+		Person p = dao.get(id);
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return p;
 	}
 
 
 	public void save(Person person) {
-		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
+		Connection con = ConnectionManager.getInstance().connect();
+		PersonDao dao = new PersonDao(con);
 		person.setPersonTypeId(PersonTypeEnum.EVENT_MANAGER.getValue());
 		dao.save(person);
-
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void save(Person person, ILoginService service) {
-		PersonDao dao = new PersonDao(ConnectionManager.getInstance().connect());
+		Connection con = ConnectionManager.getInstance().connect();
+		PersonDao dao = new PersonDao(con);
 		person.setPersonTypeId(PersonTypeEnum.EVENT_MANAGER.getValue());
 		dao.save(person);
 		person.getLogin().setPersonId(person.getId());
 		service.save(person.getLogin());
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
 

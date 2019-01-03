@@ -1,5 +1,8 @@
 package com.happyweekend.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
 public class Person {
@@ -10,6 +13,9 @@ public class Person {
 	private Date age = new Date();
 	private Integer personTypeId = 0;
 	private Login login = new Login();
+
+	@Getter@Setter
+	private Image image;
 	
 	public Integer getId() {
 		return id;

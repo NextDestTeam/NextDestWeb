@@ -44,6 +44,15 @@
                     </div>
 
                 </div>
+
+                <div class="form-row" >
+                    <div class="form-group col-md-12 " th:with="err=${#fields.hasErrors('birthday')}">
+                        <label for="birthday" class=" col-form-label">Birthday</label>
+                        <input type="date" id="birthday" name="birthday" placeholder="Birthday" class="form-control " th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{birthday}">Birthday Error</div>
+                    </div>
+                </div>
+
                 <div class="form-row " >
                     <div class="form-group col-md-6 " th:with="err=${#fields.hasErrors('email')}">
                         <label for="email" class=" col-form-label">Email</label>
@@ -75,7 +84,7 @@
                     <button type="submit" class="btn btn-primary">Register</button>
                 </div>
 
-            </div>
+
         </fieldset>
     </form>
         </div>
