@@ -1,5 +1,6 @@
 package com.happyweekend.adapter;
 
+import com.happyweekend.models.Image;
 import com.happyweekend.models.Login;
 import com.happyweekend.models.Person;
 import com.happyweekend.models.PersonType;
@@ -8,6 +9,7 @@ import com.happyweekend.spring.form.PersonForm;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.List;
 
 public class PersonAdapter {
@@ -28,7 +30,7 @@ public class PersonAdapter {
 
     }
 
-    public PersonForm toPersonForm(Person person, Login login, List<PersonType> personTypeList) {
+    public PersonForm toPersonForm(Person person, Login login, List<PersonType> personTypeList, Image image) {
         PersonForm personForm = new PersonForm();
 
         personForm.setIdLogin(login.getId());
@@ -43,6 +45,8 @@ public class PersonAdapter {
         personForm.setLastName(person.getLastName());
 
         personForm.setPersonTypeList(personTypeList);
+        if(image!=null)
+            personForm.setPhoto("data:image/png;base64, "+ Base64.getEncoder().encodeToString(image.getImage()));
 
         return personForm;
     }

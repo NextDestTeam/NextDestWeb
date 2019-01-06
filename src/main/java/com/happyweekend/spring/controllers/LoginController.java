@@ -3,6 +3,7 @@ package com.happyweekend.spring.controllers;
 import com.happyweekend.models.Login;
 import com.happyweekend.service.LoginService;
 import com.happyweekend.spring.form.LoginForm;
+import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindException;
@@ -35,26 +36,26 @@ public class LoginController extends HandlerInterceptorAdapter {
                              HttpServletResponse response,
                              Object controller) throws Exception {
 
-        if(request.getSession().getAttribute(USER_LOGIN_SESSION)==null) {
+        /*if(request.getSession().getAttribute(USER_LOGIN_SESSION)==null) {
 
             login(new LoginForm("l", "12345678"), null, request.getSession(), new BeanPropertyBindingResult(null,null));
         }
         //TODO REMOVE THIS
-        return true;
+        return true;*/
         //TODO UNCOMENT THIS
-//        String uri = request.getRequestURI();
-//        if(uri.endsWith("login")||uri.endsWith("register")
-//                ||uri.matches(".*/resources.*")
-//                ||uri.matches(".*/webjars.*")){
-//            return true;
-//        }
-//
-//        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
-//            return true;
-//        }
-//
-//        response.sendRedirect("login");
-//        return false;
+        String uri = request.getRequestURI();
+        if(uri.endsWith("login")||uri.endsWith("register")
+                ||uri.matches(".*/resources.*")
+                ||uri.matches(".*/webjars.*")){
+            return true;
+        }
+
+        if(request.getSession().getAttribute(USER_LOGIN_SESSION) != null) {
+            return true;
+        }
+
+        response.sendRedirect(request.getContextPath()+"/login");
+        return false;
     }
 
     @GetMapping(path = "/login")
@@ -63,13 +64,13 @@ public class LoginController extends HandlerInterceptorAdapter {
     }
 
     @PostMapping(path = "/login")
-    public String login(@Valid LoginForm loginForm, @RequestParam("submit") String submit, HttpSession session, BindingResult result){
+    public String login(LoginForm loginForm, @RequestParam("submit") String submit, HttpSession session, BindingResult result){
 
         if(submit!=null){
             if(submit.equals("register"))return ("redirect:/register");
         }
         if(result.hasErrors()){
-            return "login.html?error";
+            return "login.html";
         }
 
         Login login = new Login();

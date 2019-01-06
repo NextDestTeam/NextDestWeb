@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ImageService implements IImageService {
+
+    private static final int DEFAUTL_PROFILE_IMAGE_ID = 1;
+
     @Override
     public void save(Image image) {
         Connection con = ConnectionManager.getInstance().connect();
@@ -37,5 +40,10 @@ public class ImageService implements IImageService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public Image getDefaultProfileImage() {
+        return get(DEFAUTL_PROFILE_IMAGE_ID);
     }
 }

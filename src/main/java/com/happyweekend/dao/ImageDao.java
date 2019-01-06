@@ -3,7 +3,6 @@ package com.happyweekend.dao;
 
 import com.happyweekend.models.Image;
 
-import javax.servlet.SessionTrackingMode;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.*;
@@ -20,7 +19,7 @@ public class ImageDao implements Dao<Image> {
 
 
     @Override
-    public Image get(Integer id) throws SQLException {
+    public Image get(Integer id){
         String sql = "SELECT id, name, image "+
                 "FROM public.image WHERE ID = ?";
         Image image;
@@ -74,7 +73,7 @@ public class ImageDao implements Dao<Image> {
 
     @Override
     public void save(Image image) {
-        String sql = "INSERT INTO image(name,image) VALUES (?,?)";
+        String sql = "INSERT INTO image(id,name,image) VALUES (DEFAULT ,?,?)";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1,image.getName());

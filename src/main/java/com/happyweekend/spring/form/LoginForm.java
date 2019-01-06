@@ -2,7 +2,9 @@ package com.happyweekend.spring.form;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
+//import org.hibernate.validator.constraints.NotBlank;
 
 @AllArgsConstructor
 @NoArgsConstructor

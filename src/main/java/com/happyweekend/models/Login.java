@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @NoArgsConstructor
 @AllArgsConstructor
-public class Login {
+public class Login implements Serializable {
 	@Getter@Setter
 	private Integer id;
 	@Getter@Setter

@@ -9,13 +9,14 @@ public class Activity {
 	private String shortDescription;
 	private String description;
 	private String location;
-	private Integer price;
+	private Double price;
 	private Integer personId;
 	private Date date;
 	private int activityTypeId;
 	private ActivityType activityType = new ActivityType();
 	private Integer imageId;
 	private Image image;
+	private char status;
 	
 	public Integer getId() {
 		return id;
@@ -47,10 +48,10 @@ public class Activity {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public Integer getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(Integer price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	public Integer getPersonId() {
@@ -105,5 +106,13 @@ public class Activity {
 
 	public void setImage(Image image) {
 		this.image = image;
+	}
+
+	public char getStatus() {
+		return status;
+	}
+
+	public void setStatus(char status) {
+		this.status = status;
 	}
 }

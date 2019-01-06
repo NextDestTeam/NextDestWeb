@@ -33,6 +33,7 @@ public class PersonDao implements Dao<Person> {
 			person.setId(rs.getInt("id"));
 			person.setLastName(rs.getString("last_name"));
 			person.setPersonTypeId(rs.getInt("person_type_id"));
+			person.setImageId(rs.getInt("image_id"));
 		} catch (SQLException e) {
 			e.printStackTrace();
 
@@ -72,13 +73,14 @@ public class PersonDao implements Dao<Person> {
 		String date = String.format("%s",t.getAge()==null?"null":
 				" TIMESTAMP '"+sdf.format(t.getAge())+"'");
 
-		String query = "INSERT INTO PERSON(id, first_name, last_name, email, age, person_type_id)"
+		String query = "INSERT INTO PERSON(id, first_name, last_name, email, age, person_type_id, IMAGE_ID)"
 					 + "values(default, '"
 					 + t.getFirstName() + "', '"
 					 + t.getLastName() + "', '"
 					 + t.getEmail() + "', "
 					 + date+ ", '"
-					 + t.getPersonTypeId() + "')";
+					 + t.getPersonTypeId() +"', "
+					+ (t.getImageId()==null?null:+t.getImageId())+")";
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
@@ -93,13 +95,15 @@ public class PersonDao implements Dao<Person> {
 	@Override
 	public void update(Person t) {
 		Statement stm;
-		String query = "UPDATE PERSON SET("
-				 + "id='" + t.getId() + "', "
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String query = "UPDATE PERSON SET "
 				 + "first_name='" + t.getFirstName() + "', "
 				 + "last_name='" + t.getLastName() + "', "
 				 + "email='" + t.getEmail() + "', "
-				 + "age='" + t.getAge().toString() + "', "
-				 + "person_type_id='" + t.getPersonTypeId() + "')";	
+				 + "age='" + sdf.format(t.getAge()) + "', "
+				 + "person_type_id='" + t.getPersonTypeId() +"', "
+				+ " image_id="+t.getImageId()
+				+ " WHERE id = "+ t.getId();
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);

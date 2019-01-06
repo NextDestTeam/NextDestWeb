@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {PasswordValidator.class})
 public @interface EqualPassword {
 
-    String message() default "{error.password.mismatch}";
+    String message() default "The password must be equals";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
     String pass1();

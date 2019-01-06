@@ -15,6 +15,8 @@
     <link rel='stylesheet'
 
           th:href="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}">
+    <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
 
     <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
     integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -37,36 +39,96 @@
     <script
 
             th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
+    <script
+        th:src="@{/resources/js/utils.js}"></script>
+    <style>
+
+
+        .card-img-top{
+            max-height: 10rem;
+        }
+
+        .background-image {
+            /*background-image: url('/resources/images/register_backgroound.jpg');*/
+            background-size: cover;
+            display: block;
+            filter: blur(3px);
+            -webkit-filter: blur(3px);
+            height: 800px;
+            left: 0;
+            position: fixed;
+            right: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        body{
+            background-color: aliceblue;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+
+
+
+
+    </script>
 </head>
 <body>
-    <div th:replace="fragments/header :: header">
+    <div th:replace="fragments/header_search :: header">
     </div>
+
+
+
+
+    <img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/grarulhos.jpg"></img>
     <div class="container">
-        <!--/*@thymesVar id="activities" type="List<com.happyweekend.spring.form.ActivityForm>"*/-->
-        <div class="hero-unit" th:each="activity,estat :${activities}">
-            <div class="row" >
-                <div class="col-sm-6">
-                    <div class="card">
-                        <img src="" class="card-img-top"  id="imgPreview" th:src="${activity.imageBytes}">
-                        <div class="card-body">
+
+
+
+        <div class="row h-100 vertical-center-row justify-content-center align-items-center" th:if="${activities.size()==0}">
+            <div class="col-12 text-center">
+                <h1>Any result found. :(</h1>
+            </div>
+        </div>
+
+
+
+        <!--/*@thymesVar id="activities" type="java.util.List<com.happyweekend.spring.form.ActivityForm>"*/-->
+        <div class="hero-unit" th:each="i:${#numbers.sequence(0, activities.size(), 2)}">
+            <div class="card-deck"  style="margin-top:1rem;">
+                <div class="card" th:if="${activities.size()>j}" th:each="j:${#numbers.sequence(i,i+1)}" th:with="activity=${activities[j]}">
+                    <!--<div class="card-header" th:text="${activity.name}">
+                        Featured
+                    </div>-->
+                    <img src="" class="card-img-top"   id="imgPreview" th:src="${activity.imageBytes}">
+                    <div class="card-body">
+                        <div class="">
                             <h5 class="card-title" th:text="${activity.name}">Special title treatment</h5>
-                            <p class="card-text" th:text="${activity.name}">With supporting text below as a natural lead-in to additional content.</p>
+                            <p class="card-title" th:text="${activity.shortDescription}">Special title treatment</p>
+                            <!--<p class="card-text" th:text="${activity.description}">With supporting text below as a natural lead-in to additional content.</p>-->
                             <a href="#" class="btn btn-primary" th:href="@{activity/id/{id}(id=${activity.id})}">See</a>
                             <!--<a th:href="@{activity/id/activity.id}" class="badge badge-light">See/Edit</a>-->
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6" th:if="${!(estat.count==estat.size)}">
-                    <div class="card">
-                        <img src="" class="card-img-top"  id="imgPreview" th:src="${activity.imageBytes}">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${activity.name}">Special title treatment</h5>
-                            <p class="card-text" th:text="${activity.name}">With supporting text below as a natural lead-in to additional content.</p>
-                            <a href="#" class="btn btn-primary" th:href="@{activity/id/{id}(id=${activity.id})}">See</a>
-                            <!--<a th:href="@{activity/id/activity.id}" class="badge badge-light">See/Edit</a>-->
-                        </div>
+                    <div class="card-footer text-muted"
+                         th:id="'activityFooter'+${activity.id}">
+                        2 days ago
                     </div>
+                    <script>
+                        /*<![CDATA[*/
+                            var date = '[[${activity.date}]]';
+                            var price = [[${activity.price}]];
+                            var el = 'activityFooter' +'[[${activity.id}]]';
+                            var bad = [[${activity.badReaction}]];
+                            var maybe = [[${activity.morelessReaction}]];
+                            var good = [[${activity.goodReaction}]];
+                            var comments = [[${activity.comments.size()}]];
+                            addFooterText(date,price,el,bad,maybe,good,comments);
+                        /*]]>*/
+                    </script>
                 </div>
+
             </div>
         </div>
     </div>

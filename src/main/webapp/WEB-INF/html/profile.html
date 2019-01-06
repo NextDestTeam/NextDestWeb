@@ -4,7 +4,7 @@
 <head>
     <title th:text="#{profile}">Profile</title>
     <link rel='stylesheet' th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
-    <script th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
     <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}">
@@ -21,18 +21,41 @@
         };
 
 
+        /*Photo functions*/
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    $('#photo')
-                        .attr('src', e.target.result);
-                };
+                    var img = e.target.result;
 
-                reader.readAsDataURL(input.files[0]);
+
+                    /*<![CDATA[*/var context = [[@{/}]];/*]]>*/
+
+                        var request = new XMLHttpRequest();
+                        request.open("POST",context+"/profile/photo",false);
+
+                        var form = new FormData();
+                        form.append("fileDialog",document.getElementById("fileDialog").files[0]);
+
+                        request.onload = function () {
+                            if (request.status === 200) {
+                                console.log("Upload");
+                            } else {
+
+                            }
+                        };
+
+                        request.send(form);
+
+                        $('#photo')
+                            .attr('src', e.target.result);
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+
+                }
             }
-        }
 
         function photoDialog(){
 
@@ -46,13 +69,15 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
 
-    <img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/register_backgroound.jpg"></img>
+    <img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/paraty.jpg"></img>
     <div class="card col-sm-6 offset-sm-3 text-center ">
 
         <div class="card-body">
             <!--/*@thymesVar id="personForm" type="com.happyweekend.spring.form.PersonForm"*/-->
             <form th:object="${personForm}" enctype="multipart/form-data" name="personForm" th:action="@{/profile}" action="#" method="post">
                 <fieldset>
+
+                    <input th:type="hidden" type="hidden" id="id" th:value="personForm.id"/>
             <!--<legend>Please Enter with Your Data</legend>-->
 
                 <!--<div class="text-center">-->

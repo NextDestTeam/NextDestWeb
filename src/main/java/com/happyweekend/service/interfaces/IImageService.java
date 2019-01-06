@@ -6,4 +6,6 @@ public interface IImageService{
 
     void save(Image image);
     Image get(int id);
+
+    Image getDefaultProfileImage();
 }

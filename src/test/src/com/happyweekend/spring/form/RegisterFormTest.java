@@ -8,7 +8,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 /*import org.springframework.boot.test.context.SpringBootTest;*/
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -23,6 +26,8 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 /*@SpringBootTest(classes = App.class)*/
+@WebAppConfiguration
+@ContextConfiguration({"classpath*:dispatcher-config.xml"})
 public class RegisterFormTest {
 
     private Validator validator;
@@ -50,7 +55,7 @@ public class RegisterFormTest {
 
         ConstraintViolation<RegisterForm> violation = violations.iterator().next();
         assertNotNull(messageSource);
-        assertEquals(messageSource.getMessage("error.password.mismatch",null, Locale.ENGLISH),violation.getMessage());
+        assertEquals(messageSource.getMessage("validation.EqualPassword.message",null, Locale.ENGLISH),violation.getMessage());
     }
 
     @Test

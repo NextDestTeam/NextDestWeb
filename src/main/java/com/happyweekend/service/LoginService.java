@@ -1,5 +1,7 @@
 package com.happyweekend.service;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,29 +29,53 @@ public class LoginService implements ILoginService{
 	@Override
 	public boolean validLogin(Login login) {
 
+		Connection con = ConnectionManager.getInstance().connect();
 		encryptPassword(login);
-		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
+		LoginDao dao = new LoginDao(con);
 
         Login l = dao.get(login);
-		return (l.getId()>0 && l!=null);
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return (l.getId()!=null && l!=null);
 	}
 
 
 
 	@Override
 	public void save(Login login) {
+		Connection con = ConnectionManager.getInstance().connect();
 		encryptPassword(login);
-		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
+		LoginDao dao = new LoginDao(con);
 
-		dao.save(login);
-		
+		if(login.getId()==null)
+			dao.save(login);
+		else
+			dao.update(login);
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	@Override
 	public Login loadByUsername(String username) {
-		LoginDao dao = new LoginDao(ConnectionManager.getInstance().connect());
+		Connection con = ConnectionManager.getInstance().connect();
+		LoginDao dao = new LoginDao(con);
 
-		return dao.loadByUsername(username);
+		Login l = null;
+		try {
+			l = dao.loadByUsername(username);
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return l;
+
 
 	}
 

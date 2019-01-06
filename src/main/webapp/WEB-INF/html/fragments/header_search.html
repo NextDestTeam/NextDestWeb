@@ -62,8 +62,18 @@
                 </li>
             </ul>
 
-
-
+            <ul class="nav navbar-nav navbar-right mr-3">
+                <li class="nav-item">
+                    <!--/*@thymesVar id="activitySearch" type="com.happyweekend.spring.form.ActivitySearchForm"*/-->
+                    <form  class="form-inline my-2 my-lg-0" th:object="${activitySearch}" name="activitySeach"
+                           th:action="@{/activity/search/fulltext}" action="#" method="post">
+                        <!--<input type="text" class="form-control" th:value="*{name}" id="name" name="name" placeholder="Activity Name" />-->
+                        <input class="form-control mr-sm-2" type="text" th:value="*{name}" id="name" name="name"
+                               placeholder="Search" aria-label="Search">
+                        <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </li>
+            </ul>
 
 
             <ul class="nav navbar-nav navbar-right mr-4">

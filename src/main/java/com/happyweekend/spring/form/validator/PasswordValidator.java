@@ -5,6 +5,7 @@ import com.happyweekend.spring.form.validator.annotation.EqualPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.lang.reflect.Field;
 
 
 public class PasswordValidator implements ConstraintValidator<EqualPassword,Object> {
@@ -23,8 +24,16 @@ public class PasswordValidator implements ConstraintValidator<EqualPassword,Obje
         //boolean isValid = registerForm.getPassword().equals(registerForm.getRePassword());
         boolean isValid = false;
         try {
-            isValid = RegisterForm.class.getField(pass1).get(object)
-                    .equals(RegisterForm.class.getField(pass2).get(object));
+
+            Class<?> clazz = object.getClass();
+            Field f1 = clazz.getDeclaredField(pass1);
+            Field f2 = clazz.getDeclaredField(pass2);
+            f1.setAccessible(true);
+            f2.setAccessible(true);
+            Object o1 = f1.get(object);
+            Object o2 = f2.get(object);
+
+            isValid = o1.equals(o2);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -35,3 +44,4 @@ public class PasswordValidator implements ConstraintValidator<EqualPassword,Obje
 
     }
 }
+

@@ -41,66 +41,96 @@
     <!--<link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />-->
     <link rel="stylesheet"  th:href="@{/resources/css/search_activity.css}"/>
 
+    <script th:src="@{/resources/js/utils.js}"></script>
+
 </head>
 <body>
 <div th:replace="fragments/header :: header">
 </div>
-<div class="col-sm-8 offset-sm-2 text-center">
+<!--<img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/ouro_preto.jpg"></img>-->
+<div class="col-sm-10 offset-sm-1 text-center">
 
     <div class="card form-card">
-        <legend>Activity Form</legend>
+        <div class="card-header">
+            <legend>Search activity</legend>
+        </div>
+
         <!--/*@thymesVar id="activitySearch" type="com.happyweekend.spring.form.ActivitySearchForm"*/-->
-        <form th:object="${activitySearch}"   name="activitySeach"   th:action="@{/activity/search}" action="#" method="post">
-            <fieldset>
-                <div class="row">
-                    <div class="col">
+        <div class="card-body">
+            <form th:object="${activitySearch}"   name="activitySeach"   th:action="@{/activity/search}" action="#" method="post">
+                <fieldset>
+                    <div class="form-row">
                         <input type="text" class="form-control" th:value="*{name}" id="name" name="name" placeholder="Activity Name" />
-
-
+                    </div>
+                    <div class="form-row">
                         <input type="text" id="shortDescription" name="shortDescription" th:value="*{shortDescription}"
                                placeholder="Short description" class="form-control"/>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
+                    <div class="form-row">
+                        <input type="text" id="description" name="description" th:value="*{description}"
+                               placeholder="Description" class="form-control"/>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6">
+                            <label for="iniDate">Initial Date</label>
+                            <input type="date" id="iniDate" name="iniDate" th:value="*{iniDate}"
+                                   placeholder="Initial Date" class="form-control"/>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="endDate">End Date</label>
+                            <input type="date" id="endDate" name="endDate" th:value="*{endDate}"
+                                   placeholder="End Date" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="form-actions text-center">
                         <button type="submit" class="btn btn-primary">Search Activity</button>
                     </div>
-                </div>
-                <!--<div class="form-actions text-center">
-
-                </div>-->
-            </fieldset>
-        </form>
+                </fieldset>
+            </form>
+        </div>
     </div>
 </div>
 
 <div class="col-sm-10 offset-sm-1 text-center ">
     <div class="card form-card">
-        <table class="table table-striped">
-            <thead>
-            <tr>
+        <div class="car-body">
+            <table class="table table-striped">
+                <thead>
+                <tr>
 
-                <!--id, name, short_description, description, location, price, person_id, acivity_type-->
-                <th scope="col">#</th>
-                <th scope="col">Name</th>
-                <th scope="col">Short description</th>
-                <th scope="col">Location</th>
-                <th scope="col">Type</th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="line,stat :${results}">
-                <th scope="row" th:text="${stat.count}">1</th>
-                <td th:text="${line.name}">Mark</td>
-                <td th:text="${line.shortDescription}">Otto</td>
-                <td th:text="${line.location}">@mdo</td>
-                <td th:text="${line.activityType.name}">Otto</td>
-                <td><a th:href="@{/activity/id/{id}(id=${line.id})}" class="badge badge-info">See/Edit</a></td>
-            </tr>
+                    <!--id, name, short_description, description, location, price, person_id, acivity_type-->
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Short description</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Date</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--/*@thymesVar id="results" type="List<com.happyweekend.models.Activity>"*/-->
+                <tr th:each="line,stat :${results}">
+                    <th scope="row" th:text="${stat.count}">1</th>
+                    <td th:text="${line.name}">Mark</td>
+                    <td th:text="${line.shortDescription}">Otto</td>
+                    <td th:text="${line.location}">@mdo</td>
+                    <td th:text="${line.activityType.name}">Otto</td>
+                    <td th:id="'date'+${line.id}" th:text="${line.date}">Otto</td>
+                    <script>
+                        /*<![CDATA[*/
+                        var date = '[[${line.date}]]';
+                        var el = 'date' +'[[${line.id}]]';
+                        addDate(date,el);
+                        /*]]>*/
+                    </script>
+                    <td><a th:href="@{/activity/id/{id}(id=${line.id})}" class="badge badge-info">See/Edit</a></td>
+                </tr>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
     </div>
 

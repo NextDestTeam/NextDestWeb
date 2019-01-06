@@ -17,7 +17,7 @@ import java.util.Date;
 @Constraint(validatedBy = {BirthdayValidator.class})
 public @interface Birthday {
 
-    String message() default "{error.birthday.invalid}";
+    String message() default "Invalid Birthday";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

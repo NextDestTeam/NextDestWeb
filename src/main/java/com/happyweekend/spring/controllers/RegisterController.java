@@ -2,12 +2,14 @@ package com.happyweekend.spring.controllers;
 
 import com.happyweekend.models.Login;
 import com.happyweekend.models.Person;
+import com.happyweekend.service.ImageService;
 import com.happyweekend.service.LoginService;
 import com.happyweekend.service.PersonService;
 import com.happyweekend.service.interfaces.ILoginService;
 import com.happyweekend.spring.form.RegisterForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ public class RegisterController {
 
 
 	private PersonService service = new PersonService();
+	private ImageService imageService = new ImageService();
 	private ILoginService loginService = new LoginService();
 
 	/*@GetMapping("/greeting")
@@ -38,6 +41,10 @@ public class RegisterController {
 	
 	@PostMapping("/register")
 	public ModelAndView register(@ModelAttribute("registerForm") @Valid RegisterForm form, BindingResult result) {
+
+		if(loginService.loadByUsername(form.getUsername())!=null){
+			result.addError(new FieldError("registerForm","username","Username already in use."));
+		}
 
 		if(result.hasErrors()){
 			return new ModelAndView("register1.html","registerForm",form);
@@ -60,6 +67,7 @@ public class RegisterController {
 		p.setEmail(registerForm.getEmail());
 		l.setLoginName(registerForm.getUsername());
 		l.setPassword(registerForm.getPassword());
+		p.setImage(imageService.getDefaultProfileImage());
 		p.setLogin(l);
 		return p;
 

@@ -100,10 +100,10 @@ public class LoginDao implements Dao<Login> {
 	@Override
 	public void update(Login t) {
 		Statement stm;
-		String query = "UPDATE LOGIN SET("
-					 + "id='" + t.getId() + "', "
+		String query = "UPDATE LOGIN SET "
 					 + "login_name='" + t.getLoginName() + "', "
-					 + "password='" + t.getPassword() + "')";
+					 + "password='" + t.getPassword() + "'"+
+				" WHERE id = "+t.getId();
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
@@ -126,18 +126,21 @@ public class LoginDao implements Dao<Login> {
 	}
 
 	public Login loadByUsername(String username) {
-		Login login = new Login();
+		Login login = null;
 		ResultSet rs;
 		String query = "SELECT * FROM LOGIN WHERE login_name='" + username + "'";
 		Statement stm;
 		try {
 			stm = this.connection.createStatement();
 			rs = stm.executeQuery(query);
-			rs.next();
-			login.setId(rs.getInt("id"));
-			login.setLoginName(rs.getString("login_name"));
-			login.setPassword(rs.getString("password"));
-			login.setPersonId(rs.getInt("person_id"));
+
+			if(rs.next()) {
+				login = new Login();
+				login.setId(rs.getInt("id"));
+				login.setLoginName(rs.getString("login_name"));
+				login.setPassword(rs.getString("password"));
+				login.setPersonId(rs.getInt("person_id"));
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();

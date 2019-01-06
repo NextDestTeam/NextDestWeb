@@ -15,6 +15,7 @@
     <link rel='stylesheet'
 
           th:href="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}">
 
           <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
           integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -29,36 +30,126 @@
             <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
                     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
                     crossorigin="anonymous"></script>-->
-    <script
-            th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
             <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js" ></script>-->
     <script
-
             th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
 
-    <link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />
+    <!--<link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />-->
     <link rel="stylesheet"  th:href="@{/resources/css/activity_form.css}"/>
 
 
 
+
+    <script>
+
+        var geocoder;
+        var map;
+        var infoWindow;
+
+        var address = "Sorocaba";
+
+        /*Maps functions*/
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: {lat: -34.397, lng: 150.644}
+            });
+            geocoder = new google.maps.Geocoder();
+
+
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+
+        function codeAddress(geocoder, map) {
+            geocoder.geocode({'address': address}, function(results, status) {
+                if (status === 'OK') {
+                    map.setCenter(results[0].geometry.location);
+                    var marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+
+        function locationKeyPress(e) {
+            e = e || window.event;
+            if(e.keyCode==13){
+                e.preventDefault();
+                updateLocation();
+                return false;
+            }
+            return true;
+        }
+
+        function updateLocation(){
+            var loc = document.getElementById("location");
+            address = loc.value;
+            codeAddress(geocoder, map);
+        }
+
+        /*Photo functions*/
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var img = e.target.result;
+
+
+                    /*<![CDATA[*/var context = [[@{/}]];/*]]>*/
+
+                    var request = new XMLHttpRequest();
+                    request.open("POST",context+"/activity/photo",false);
+
+                    var form = new FormData();
+                    form.append("file",document.getElementById("file").files[0]);
+
+                    request.onload = function () {
+                        if (request.status === 200) {
+                            console.log("Upload");
+                        } else {
+
+                        }
+                    };
+
+                    request.send(form);
+
+                    $('#imgPreview')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+
+            }
+        }
+
+
+    </script>
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCV_-ddx0W0PkdyXHrp8P8fn_KuY_0ZcX0&callback=initMap&libraries=places">
+    </script>
+
+
 </head>
 <body>
-<script >
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
 
-            reader.onload = function (e) {
-                $('#imgPreview')
-                    .attr('src', e.target.result);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
 <div th:replace="fragments/header :: header">
 </div>
+<!--<img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/blumenau.jpg"></img>-->
+
 <!--<div class="alert alert-danger" role="alert">
 
     <div th:errors="${registerForm.*}">
@@ -83,11 +174,26 @@
 <div class="col-sm-10 offset-sm-1 text-center ">
 
     <div class="card form-card">
-        <legend>Activity Form</legend>
-        <!--/*@thymesVar id="activityForm" type="com.happyweekend.spring.form.ActivityForm"*/-->
-        <form th:object="${activityForm}"   name="activityForm" enctype="multipart/form-data"  th:action="@{/activity}" action="#" method="post">
+        <div class="card-header">
+            <legend>Activity Form</legend>
+        </div>
+        <div class="card-body">
+            <!--/*@thymesVar id="activityForm" type="com.happyweekend.spring.form.ActivityForm"*/-->
+            <form th:object="${activityForm}"   name="activityForm" enctype="multipart/form-data"  th:action="@{/activity}"  action="#" method="post">
+        <!--<form th:object="${activityForm}"   name="activityForm" enctype="multipart/form-data"  th:action="@{/activity}" action="#" method="post">-->
             <input type="hidden" th:type="hidden" th:id="id"  name="id" th:value="*{id}"/>
             <fieldset>
+                <div class="form-row form-group" >
+                    <div class="input-group " th:with="err=${#fields.hasErrors('activityType')}">
+                        <label for="description" class="col-form-label">Activity status</label>
+                        <select class="form-control custom-select custom-select-lg " th:default="S" th:field="*{status}"  th:value="*{status}">
+                            <option  th:value="S" th:text="Sketch">Sketch</option>
+                            <option  th:value="P" th:text="Public">Public</option>
+                            <option  th:value="D" th:text="Hide">Hide</option>
+                        </select>
+                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{status}">Status Error</div>
+                    </div>
+                </div>
                 <div class="form-group" >
                     <div class="input-group " th:with="err=${#fields.hasErrors('name')}">
                         <label for="name" class=" col-form-label">Activity Name</label>
@@ -103,11 +209,23 @@
                     </div>
                 </div>
                 <div class="form-group" >
-                    <div class="input-group" th:with="err=${#fields.hasErrors('location')}">
-                        <label for="location" class="col-form-label">Activity location</label>
-                        <input type="text" th:class="form-control" th:value="*{location}" id="location" name="location" placeholder="Please describe where will be your activity"  th:attrappend="class=${' '+(!err?'':'is-invalid')}"/>
-                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{location}">Activity Location Error</div>
+                    <div class="form-row">
+                        <div class="input-group" th:with="err=${#fields.hasErrors('location')}">
+                            <label for="location" class="col-form-label">Activity location</label>
+                            <input type="text"  th:class="form-control" th:value="*{location}" id="location"
+                                   name="location" placeholder="Please describe where will be your activity"
+                                   th:attrappend="class=${' '+(!err?'':'is-invalid')}" onkeypress="return locationKeyPress(event);" />
+                            <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{location}">Activity Location Error</div>
+                        </div>
                     </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div  id="map-container-google-1 map-container" class="z-depth-1-half map-container" >
+                            <div id="map" style="height: 100%"></div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="form-row form-group" >
                     <div class="input-group " th:with="err=${#fields.hasErrors('description')}">
@@ -165,8 +283,7 @@
                     <div class="custom-file">
                         <input type="file" th:id="file" name="file" class="custom-file-input" id="file"
                                accept="image/png"
-                               onchange="readURL(this);"
-                        >
+                               onchange="readURL(this);">
                         <label class="custom-file-label" for="file">Select file</label>
                     </div>
                     <div class="col-sm-8 offset-sm-2 image-container">
@@ -181,6 +298,7 @@
 
             </fieldset>
         </form>
+        </div>
     </div>
 
 
@@ -199,40 +317,83 @@
 
     <!--/*@thymesVar id="activityForm" type="com.happyweekend.spring.form.ActivityForm"*/-->
     <div th:if="${activityForm.id>0}">
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="panel panel-white post panel-shadow" th:each="comment :${ activityForm.comments}">
-              <div class="post-heading">
-                  <div class="pull-left meta">
-                      <div class="title">
-                          <a href="#"><b th:text="${comment.person.firstName + ' ' + comment.person.lastName}">Ryan Haywood</b></a>
-                      </div>
-                  </div>
-              </div>
-              <div class="post-description h4">
-                  <p th:text="${comment.comment}">...</p>
-
-              </div>
-
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-text">Users reactions</h4>
+                <span th:text="${activityForm.badReaction}"></span> <span class="glyphicon glyphicon-remove-sign" ></span>
+                <span th:text="${activityForm.morelessReaction}"></span><span class="glyphicon glyphicon-question-sign" ></span>
+                <span th:text="${activityForm.goodReaction}"></span><span class="glyphicon glyphicon-ok-sign" ></span>
+                <span th:text="${activityForm.comments.size()}"></span><span class="glyphicon glyphicon-comment" ></span>
             </div>
-        </div>
-        <div class="card form-card">
-            <!--/*@thymesVar id="activityComment" type="com.happyweekend.spring.form.PersonActivityCommentForm"*/-->
-            <form th:object="${activityComment}"   name="activityComment"   th:action="@{/activity/comment}" action="#" method="post">
-                <input type="hidden" th:type="hidden" th:id="id" id="id" name="id" th:value="*{id}"/>
-                <input type="hidden" th:type="hidden" th:id="personId" id="personId" name="personId" th:value="*{personId}"/>
-                <input type="hidden" th:type="hidden" th:id="activityId" id="activityId" name="activityId" th:value="*{activityId}"/>
+            <div class="card-body">
+                <div class="row" th:each="i:${#numbers.sequence(0,activityForm.comments.size(),2)}">
+                <div class="col-sm-6" th:with="comment=${activityForm.comments[j]}" th:each="j:${#numbers.sequence(i,i+1)}" th:if="${j<activityForm.comments.size()}">
+                    <div class="card col-sm-12">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <img id="photo"
+                                         class="rounded-circle"
+                                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABnCAMAAAAqn6zLAAABKVBMVEVsa2tta2ttbGxubGxubW1vbW1vbm5wbm5wb29xcHBycHBycXFzcXFzcnJ0c3N1dHR2dXV3dnZ4d3d5eHh5eXl6eXl7enp8enp8e3t9fHx+fX1/fn6BgICEg4OFhISJiIiLioqMi4uNjY2Pjo6Qjo6Qj4+SkZGUk5OVlJSXlpabmpqcm5uenZ2fnp6gn5+goKCioqKlpaWpqKipqamqqamtra22tra3tra5ubm6urq7u7u+vr6/vr7Av7/CwMDCwsLDwsLEw8PFxMTFxcXHx8fLysrOzs7R0NDU09PV1dXW1dXc29ve3t7f39/g4ODi4uLj4uLk5OTl5eXo5+fp6Ojp6enq6enr6urr6+vs7Ozy8vL19fX5+fn6+vr8/Pz9/f39/v7+/v7///+14iZxAAAC9ElEQVR4Ae3Z+VPjNhTA8eD1eqNNLR9eu3pv783SEG5COQjhKAchhIYWSGkgJKD//4/oJMzQciRW/ERnOvX3V3nmM/IoijTOyH+n1Emd1Ele6qRO6lwflMYj3/Wj8dLB9Ys5+99ecy8UAoQIPf762/6LOL94dgj4dxDa3rZ2588POYGPE7kPTb3OhhHhc0VGRaez8Abw+eDNgj5nOgc4KMhN63KW3uKw3i7pcWoGDs+oaXFMiHHA1OFM+RiXP0V3WhmML9MiO8VAwQmKVKczBgoOjHWIzoaDKjkbRCcfKjlhnuhYoOSARXMuGKrFLkhO1VZ07CrJ2XYUHWeb5JRdRcctk5w1ZWeN5Gwqv7fN/8Q6OFNe12ckR5qgxIApac4XxX3nC9GpKO6jFaLTNkCBAaNNdGRB6X+uIKlO0wCF6TTJjpxQOIdMSLpzEzshMG40OLL6KsZ5VdVz7l3MDWVyi7rO8ZM2DFTAntR3L5nLwiAmO6fznlUedM8aK0tNTm22/zMStniiCFv80RucrZGddt6yv8te6zaPHtyDI26v90e+21a+TXO2zADRE5ey184ni/sR9Ip8bn3akb0uhYcYmFsU5yfWn0Fkrcp+l3vzn13+A3c/z+/d2XLVivqzY4XEzlXg4V3A8VA+1yFywLu88CqZc2pGeF/E3u/Kx+2+Z/98xDxN4tQN8XAJc6tQOb8fPq8ULP5wsQujPrrTyAA+CkKHmfC1MFX4CiZzwqcPZBqjOq0BuzSIKAzCSAwYNVqjOV1bYJKE3R3J+RhgsoKPozgljknjP6s7vxmQ2AHjd2Xn3Y+YvOidqrPCkRJfUXM6FpAcsDpKTslDWl5JxelaQHTA6io4yy5Sc5cVHE+QHeHFO3WG9Fg91pnxkZ4/E+s4AukJJ845YagjdhLjlF0tjluOcYqBFicoxjiB0OKIYLhzy0CLA+x2qNPMop6yzaGONDS9N0MOd45MlqPHzKPY/a1x/Cu140b6/TR1Uid1Uid1/lfOX467WP+MnlEKAAAAAElFTkSuQmCC"
+                                         th:src="'data:image/png;base64, '+${T(java.util.Base64).getEncoder().encodeToString(comment.getPerson().getImage().getImage())}"
+                                         th:if="${comment.getPerson().getImage()!=null}"
+                                         alt="Profile photo" width="64" height="64">
 
-                <div class="form-row form-group" >
-                    <div class="input-group " th:with="err=${#fields.hasErrors('comment')}">
-                        <label for="description" class="col-form-label">Activity comments</label>
-                        <textarea class="form-control" th:value="*{comment}"  id="comment" name="comment" placeholder="Please let your comments" aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"></textarea>
-                        <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{comment}">Activity Description Error</div>
+                                    <img id="photo"
+                                         class="rounded-circle"
+                                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGcAAABnCAMAAAAqn6zLAAABKVBMVEVsa2tta2ttbGxubGxubW1vbW1vbm5wbm5wb29xcHBycHBycXFzcXFzcnJ0c3N1dHR2dXV3dnZ4d3d5eHh5eXl6eXl7enp8enp8e3t9fHx+fX1/fn6BgICEg4OFhISJiIiLioqMi4uNjY2Pjo6Qjo6Qj4+SkZGUk5OVlJSXlpabmpqcm5uenZ2fnp6gn5+goKCioqKlpaWpqKipqamqqamtra22tra3tra5ubm6urq7u7u+vr6/vr7Av7/CwMDCwsLDwsLEw8PFxMTFxcXHx8fLysrOzs7R0NDU09PV1dXW1dXc29ve3t7f39/g4ODi4uLj4uLk5OTl5eXo5+fp6Ojp6enq6enr6urr6+vs7Ozy8vL19fX5+fn6+vr8/Pz9/f39/v7+/v7///+14iZxAAAC9ElEQVR4Ae3Z+VPjNhTA8eD1eqNNLR9eu3pv783SEG5COQjhKAchhIYWSGkgJKD//4/oJMzQciRW/ERnOvX3V3nmM/IoijTOyH+n1Emd1Ele6qRO6lwflMYj3/Wj8dLB9Ys5+99ecy8UAoQIPf762/6LOL94dgj4dxDa3rZ2588POYGPE7kPTb3OhhHhc0VGRaez8Abw+eDNgj5nOgc4KMhN63KW3uKw3i7pcWoGDs+oaXFMiHHA1OFM+RiXP0V3WhmML9MiO8VAwQmKVKczBgoOjHWIzoaDKjkbRCcfKjlhnuhYoOSARXMuGKrFLkhO1VZ07CrJ2XYUHWeb5JRdRcctk5w1ZWeN5Gwqv7fN/8Q6OFNe12ckR5qgxIApac4XxX3nC9GpKO6jFaLTNkCBAaNNdGRB6X+uIKlO0wCF6TTJjpxQOIdMSLpzEzshMG40OLL6KsZ5VdVz7l3MDWVyi7rO8ZM2DFTAntR3L5nLwiAmO6fznlUedM8aK0tNTm22/zMStniiCFv80RucrZGddt6yv8te6zaPHtyDI26v90e+21a+TXO2zADRE5ey184ni/sR9Ip8bn3akb0uhYcYmFsU5yfWn0Fkrcp+l3vzn13+A3c/z+/d2XLVivqzY4XEzlXg4V3A8VA+1yFywLu88CqZc2pGeF/E3u/Kx+2+Z/98xDxN4tQN8XAJc6tQOb8fPq8ULP5wsQujPrrTyAA+CkKHmfC1MFX4CiZzwqcPZBqjOq0BuzSIKAzCSAwYNVqjOV1bYJKE3R3J+RhgsoKPozgljknjP6s7vxmQ2AHjd2Xn3Y+YvOidqrPCkRJfUXM6FpAcsDpKTslDWl5JxelaQHTA6io4yy5Sc5cVHE+QHeHFO3WG9Fg91pnxkZ4/E+s4AukJJ845YagjdhLjlF0tjluOcYqBFicoxjiB0OKIYLhzy0CLA+x2qNPMop6yzaGONDS9N0MOd45MlqPHzKPY/a1x/Cu140b6/TR1Uid1Uid1/lfOX467WP+MnlEKAAAAAElFTkSuQmCC"
+                                         th:if="${comment.getPerson().getImage()==null}"
+                                         alt="Profile photo" width="64" height="64">
+
+                                </div>
+                                <div class="col-sm-9">
+                                    <h7 class="card-title" th:text="${comment.person.firstName + ' ' + comment.person.lastName}">Card title</h7>
+                                    <p class="card-text" th:text="${comment.comment}">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                                    <p class="card-text"><small class="text-muted"></small></p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-actions text-center">
-                    <button type="submit" class="btn btn-primary">Comment Activity</button>
-                </div>
-            </form>
+
+            </div>
+            </div>
+        </div>
+            <!--<div class="panel panel-white post panel-shadow" th:each="comment :${ activityForm.comments}">-->
+              <!--<div class="post-heading">-->
+                  <!--<div class="pull-left meta">-->
+                      <!--<div class="title">-->
+                          <!--<a href="#"><b th:text="${comment.person.firstName + ' ' + comment.person.lastName}">Ryan Haywood</b></a>-->
+                      <!--</div>-->
+                  <!--</div>-->
+              <!--</div>-->
+              <!--<div class="post-description h4">-->
+                  <!--<p th:text="${comment.comment}">...</p>-->
+
+              <!--</div>-->
+
+            <!--</div>-->
+
+        <div class="card form-card">
+            <!--/*@thymesVar id="activityComment" type="com.happyweekend.spring.form.PersonActivityCommentForm"*/-->
+            <div class="card-body">
+                <form th:object="${activityComment}"   name="activityComment"   th:action="@{/activity/comment}" action="#" method="post">
+                    <input type="hidden" th:type="hidden" th:id="id" id="id" name="id" th:value="*{id}"/>
+                    <input type="hidden" th:type="hidden" th:id="personId" id="personId" name="personId" th:value="*{personId}"/>
+                    <input type="hidden" th:type="hidden" th:id="activityId" id="activityId" name="activityId" th:value="*{activityId}"/>
+
+                    <div class="form-row form-group" >
+                        <div class="input-group " th:with="err=${#fields.hasErrors('comment')}">
+                            <label for="description" class="col-form-label">Activity comments</label>
+                            <textarea class="form-control" th:value="*{comment}"  id="comment" name="comment" placeholder="Please let your comments" aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"></textarea>
+                            <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{comment}">Activity Description Error</div>
+                        </div>
+                    </div>
+                    <div class="form-actions text-center">
+                        <button type="submit" class="btn btn-primary">Comment Activity</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

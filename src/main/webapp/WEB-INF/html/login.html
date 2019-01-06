@@ -6,83 +6,61 @@
   <head >
     <title>Please Login</title>
   </head>
-    <!--<link rel='stylesheet' href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-    crossorigin="anonymous">-->
-    <link rel='stylesheet'
-
-          th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
-    <!--<link rel='stylesheet' src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css" >-->
-    <link rel='stylesheet'
-
-          th:href="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.css}">
-
-    <!--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous" ></script>-->
-    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"
-
-    ></script>
-
-    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous" ></script>-->
-    <script
-            th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>-->
-    <script
-            th:src="@{/webjars/popper.js/1.14.3/popper.min.js}"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js" ></script>-->
-    <script
-
-        th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
-<link rel="stylesheet" href="/resources/css/register.css" th:href="@{/resources/css/register.css}"/>
+    <link rel='stylesheet' th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}">
+    <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}">
+    <link rel="stylesheet" href="/resources/css/register.css" th:href="@{/resources/css/register.css}"/>
   <body >
-    <div th:fragment="content">
+    <div th:fragment="content" >
+        <img class="background-image" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/pelourinho.jpg">
 	    <!--<span th:text="#{lang.change}"></span>:
 	    <select id="locales">
 	        <option value=""></option>
 	        <option value="en" th:text="#{lang.eng}"></option>
 	        <option value="pt" th:text="#{lang.pt}"></option>
 	    </select>-->
-        <img class="background-imageId" th:src="@{/resources/images/register_backgroound.jpg}" src="/resources/images/register_backgroound.jpg"></img>
-        <div class="card col-sm-4 offset-sm-4 text-center ">
-            <div class="card-title">
-                <div class="row text-center">
-                    <legend>Please Login</legend>
-                </div>
-                <div css="form-row">
-                    <div class="text-center">
-                        <img th:src="@{/resources/images/logo.png}" name="logo" id="logo" class="rounded" alt="Happy Weekend">
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                
-                <!--/*@thymesVar id="loginForm" type="com.happyweekend.spring.form.LoginForm"*/-->
-                <form name="f" th:object="${loginForm}" th:action="@{/login}" method="post">
-                    <fieldset>
-                        <div class="form-group">
 
-                            <div th:if="${param.error}" class="alert alert-error">
-                                Invalid username and password.
-                            </div>
-                            <div th:if="${param.logout}" class="alert alert-success">
-                                You have been logged out.
-                            </div>
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Username"/>
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
-                            <div class="form-actions">
-                                <button type="submit" name="submit" class="btn btn-primary" value="login" th:value="login">Log in</button>
-                                <button type="submit" name="submit" th:value="register" value="register" class="btn btn-secondary" th:action="register" action="register">Register</button>
+        <div class="d-flex h-100">
+            <div class="row align-self-center w-100">
+                <div class="card col-sm-4 offset-sm-4 text-center justify-content-center align-items-center">
+                    <div class="card-title">
+                        <div class="row text-center">
+
+                        </div>
+                        <div css="form-row">
+                            <div class="text-center">
+                                <img th:src="@{/resources/images/logo.png}" name="logo" id="logo" class="rounded" alt="Happy Weekend">
                             </div>
                         </div>
-                    </fieldset>
-                </form>
+                    </div>
+                    <div class="card-body">
+
+                        <!--/*@thymesVar id="loginForm" type="com.happyweekend.spring.form.LoginForm"*/-->
+                        <form name="f" th:object="${loginForm}" th:action="@{/login}" method="post">
+                            <fieldset>
+                                <div class="form-group">
+
+                                    <div th:if="${param.error}" class="alert alert-error">
+                                        Invalid username and password.
+                                    </div>
+                                    <div th:if="${param.logout}" class="alert alert-success">
+                                        You have been logged out.
+                                    </div>
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" id="username" name="username" placeholder="Username"/>
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
+                                    <div class="form-actions">
+                                        <button type="submit" name="submit" class="btn btn-primary" value="login" th:value="login">Log in</button>
+                                        <button type="submit" name="submit" th:value="register" value="register" class="btn btn-secondary" th:action="register" action="register">Register</button>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

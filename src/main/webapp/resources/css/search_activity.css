@@ -1,3 +1,20 @@
 .form-control{
     margin:20px;
 }
+
+.background-image {
+    /*background-image: url('/resources/images/register_backgroound.jpg');*/
+    background-size: cover;
+    display: block;
+    filter: blur(3px);
+    -webkit-filter: blur(3px);
+    height: 800px;
+    left: 0;
+    position: fixed;
+    right: 0;
+    z-index: -1;
+    opacity: 0.3;
+}
+body{
+    background-color: aliceblue;
+}

@@ -8,6 +8,7 @@ import com.happyweekend.models.ActivityType;
 import com.happyweekend.models.Image;
 import com.happyweekend.service.interfaces.IActivityService;
 import com.happyweekend.service.interfaces.IImageService;
+import com.happyweekend.spring.form.ActivitySearchForm;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,13 +19,14 @@ public class ActivityService implements IActivityService {
     public List<Activity> getActivities() {
         Connection con = ConnectionManager.getInstance().connect();
         ActivityDao dao = new ActivityDao(con);
+        List<Activity> list = dao.getAll();
         try {
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
-        return dao.getAll();
+        return list;
     }
 
     @Override
@@ -41,7 +43,10 @@ public class ActivityService implements IActivityService {
                 }
 
                 ActivityDao dao = new ActivityDao(con);
-                dao.save(activity);
+                if(activity.getId()==null)
+                    dao.save(activity);
+                else
+                    dao.update(activity);
 
             } finally {
                 con.close();
@@ -65,8 +70,6 @@ public class ActivityService implements IActivityService {
                 activity.setImage(image);
             }
             return activity;
-        } catch (SQLException e) {
-            e.printStackTrace();
         } finally {
             try {
                 con.close();
@@ -74,8 +77,48 @@ public class ActivityService implements IActivityService {
                 e.printStackTrace();
             }
         }
-        return null;
 
+
+    }
+
+    @Override
+    public List<Activity> search(ActivitySearchForm form) {
+        Connection con = ConnectionManager.getInstance().connect();
+        try {
+            ActivityDao dao = new ActivityDao(con);
+            ActivityTypeService activityTypeService = new ActivityTypeService();
+            List<ActivityType> activityTypes = activityTypeService.getActivityTypes();
+            List<Activity> res = dao.search(form);
+
+            res.forEach(x -> x.setActivityType(
+                    activityTypes.stream().filter(y -> y.getId() == x.getActivityTypeId()).findFirst().get()
+            ));
+            con.close();
+            return res;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Activity> searchFullText(ActivitySearchForm form) {
+        Connection con = ConnectionManager.getInstance().connect();
+        try {
+            ActivityDao dao = new ActivityDao(con);
+            ActivityTypeService activityTypeService = new ActivityTypeService();
+            List<ActivityType> activityTypes = activityTypeService.getActivityTypes();
+            List<Activity> res = dao.searchFullText(form);
+
+            res.forEach(x -> x.setActivityType(
+                    activityTypes.stream().filter(y -> y.getId() == x.getActivityTypeId()).findFirst().get()
+            ));
+            con.close();
+            return res;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Activity> get(Activity activity) {

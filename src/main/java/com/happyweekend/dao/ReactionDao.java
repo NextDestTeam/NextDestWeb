@@ -36,6 +36,30 @@ public class ReactionDao implements Dao<Reaction> {
 		return reaction;
 	}
 
+
+	public List<Reaction> getAllByActivity(int idActivity) {
+		List<Reaction> reactions = new ArrayList<>();
+		ResultSet rs;
+		String query = "SELECT * FROM REACTION WHERE activity = "+idActivity;
+		Statement stm;
+		try {
+			stm = this.connection.createStatement();
+			rs = stm.executeQuery(query);
+			while(rs.next()){
+				Reaction reaction = new Reaction();
+				reaction.setActivity(rs.getInt("activity"));
+				reaction.setId(rs.getInt("id"));
+				reaction.setPersonId(rs.getInt("person_id"));
+				reaction.setReaction(rs.getString("reaction"));
+				reactions.add(reaction);
+			}
+			return reactions;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<>();
+	}
+
 	@Override
 	public List<Reaction> getAll() {
 		List<Reaction> reactions = new ArrayList<>();

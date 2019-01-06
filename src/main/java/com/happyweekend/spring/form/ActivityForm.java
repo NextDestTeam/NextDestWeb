@@ -5,6 +5,8 @@ import com.happyweekend.models.Activity;
 import com.happyweekend.models.ActivityType;
 import com.happyweekend.models.PersonActivityComment;
 import com.happyweekend.models.Reaction;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,7 +30,7 @@ public class ActivityForm {
     private String description;
     @NotEmpty
     private String location;
-    private Integer price;
+    private Double price;
     private Integer personId;
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
@@ -44,8 +46,15 @@ public class ActivityForm {
     private String imageName;
     private List<PersonActivityComment> comments;
     private List<Reaction> reactions;
+    @Getter@Setter
+    private Integer badReaction;
+    @Getter@Setter
+    private Integer morelessReaction;
+    @Getter@Setter
+    private Integer goodReaction;
     private String imageBytes;
     private Integer imageId;
+    private char status;
 
     public ActivityForm(){
 
@@ -63,7 +72,9 @@ public class ActivityForm {
         this.name = activity.getName();
         this.location = activity.getLocation();
         this.price = activity.getPrice();
-        this.imageBytes = "data:image/png;base64, "+Base64.getEncoder().encodeToString(activity.getImage().getImage());
+        if(activity.getImage()!=null)
+            this.imageBytes = "data:image/png;base64, "+Base64.getEncoder().encodeToString(activity.getImage().getImage());
+        this.status = activity.getStatus();
     }
 
     public Integer getId() {
@@ -114,11 +125,11 @@ public class ActivityForm {
         this.location = location;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
@@ -200,5 +211,13 @@ public class ActivityForm {
 
     public void setImageId(Integer imageId) {
         this.imageId = imageId;
+    }
+
+    public char getStatus() {
+        return status;
+    }
+
+    public void setStatus(char status) {
+        this.status = status;
     }
 }

@@ -3,10 +3,12 @@ package com.happyweekend.spring.controllers;
 import com.happyweekend.models.Activity;
 import com.happyweekend.models.Image;
 import com.happyweekend.models.Login;
+import com.happyweekend.models.Person;
 import com.happyweekend.service.*;
 import com.happyweekend.spring.form.ActivityForm;
 import com.happyweekend.spring.form.ActivitySearchForm;
 import com.happyweekend.spring.form.PersonActivityCommentForm;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.*;
+import java.time.ZoneId;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -26,6 +30,9 @@ public class ActivityController {
 
 
     private static final String FORM_NAME = "activityForm";
+    private static final String ACTIVITY_IMAGE = "activityImage";
+    private static final String ACTIVITY_IMAGE_FILENAME = "activityImageFileName";
+
 
     ActivityService service = new ActivityService();
     ActivityTypeService activityTypeService = new ActivityTypeService();
@@ -40,25 +47,38 @@ public class ActivityController {
         ActivityForm form = new ActivityForm();
         form.setActivityTypeList(activityTypeService.getActivityTypes());
         form.setPersonId(((Login)session.getAttribute(LoginController.USER_LOGIN_SESSION)).getPersonId());
+        session.setAttribute(ACTIVITY_IMAGE,null);
+        session.setAttribute(ACTIVITY_IMAGE_FILENAME,null);
 
         return new ModelAndView("activity_form.html",FORM_NAME,form);
     }
 
 
     @GetMapping(path="activity/id/{id}")
-    public ModelAndView load(@PathVariable int id){
+    public ModelAndView load(@PathVariable int id, HttpSession session){
         Activity activity = service.get(id);
+
         if(activity!=null){
             ActivityForm form = new ActivityForm(activity);
             form.setComments(commentService.getByActivity(id));
             form.setActivityTypeList(activityTypeService.getActivityTypes());
-            form.setReactions(reactionService.getByActivity(id));
+            form.setReactions(reactionService.getAllByActivity(id));
+            form.setBadReaction((int) form.getReactions().stream().filter(x->x.getReaction().equals("N")).count());
+            form.setMorelessReaction((int) form.getReactions().stream().filter(x->x.getReaction().equals("M")).count());
+            form.setGoodReaction((int) form.getReactions().stream().filter(x->x.getReaction().equals("I")).count());
             //form.setImageBytes(loadImage(form.getImageName()));
             form.setImageBytes(form.getImageBytes());
             ModelAndView modelAndView = new ModelAndView("activity_form.html",FORM_NAME,form);
-            //TODO get peson id
+
+            if(activity.getImageId()!=null) {
+                session.setAttribute(ACTIVITY_IMAGE_FILENAME, activity.getImage().getName());
+                session.setAttribute(ACTIVITY_IMAGE, activity.getImage().getImage());
+            }
+
+            Login l = (Login)session.getAttribute(LoginController.USER_LOGIN_SESSION);
+
             PersonActivityCommentForm commentForm = new PersonActivityCommentForm();
-            commentForm.setPersonId(1);
+            commentForm.setPersonId(l.getPersonId());
             commentForm.setActivityId(id);
 
             modelAndView.addObject("activityComment",commentForm);
@@ -75,86 +95,103 @@ public class ActivityController {
     }
 
     @PostMapping(path = "activity/search")
-    public ModelAndView search(ActivitySearchForm form, BindingResult bindingResult){
+    public ModelAndView search(ActivitySearchForm form, BindingResult bindingResult,HttpSession session){
 
-        Activity a = new Activity();
-
-        a.setName(form.getName());
-        a.setShortDescription(form.getShortDescription());
-
+        Login l = (Login) session.getAttribute(LoginController.USER_LOGIN_SESSION);
+        form.setPersonId(l.getPersonId());
         ModelAndView mav = new ModelAndView("search_activity.html");
-        mav.addObject("results",service.get(a));
+        mav.addObject("results",service.search(form));
         mav.addObject("activitySearch",form);
         return mav;
 
     }
 
-    public List<ActivityForm> getUserActivities(){
+
+    public List<ActivityForm> getUserActivities(Person p){
         List<Activity> activities = service.getActivities();
         List<ActivityForm> list = new ArrayList<>();
         ImageService imageService = new  ImageService();
-        for(Activity a : activities) {
+        activities.stream().filter(x->x.getPersonId()==p.getId()).forEach(
+                a->{
+                    if(a.getImageId()>0 && a.getImageId()!=null) {
 
-            if(a.getImageId()>0 && a.getImageId()!=null) {
+                        a.setImage(imageService.get(a.getImageId()));
+                        a.setImageId(a.getImage().getId());
+                    }
+                    ActivityForm form = new ActivityForm(a);
+                    form.setComments(commentService.getByActivity(a.getId()));
+                    form.setActivityTypeList(activityTypeService.getActivityTypes());
+                    form.setReactions(reactionService.getAllByActivity(a.getId()));
+                    form.setBadReaction((int) form.getReactions().stream().filter(x->x.getReaction().equals("N")).count());
+                    form.setMorelessReaction((int) form.getReactions().stream().filter(x->x.getReaction().equals("M")).count());
+                    form.setGoodReaction((int) form.getReactions().stream().filter(x->x.getReaction().equals("I")).count());
 
-                a.setImage(imageService.get(a.getId()));
-                a.setImageId(a.getImage().getId());
-            }
-            ActivityForm form = new ActivityForm(a);
 
+                    //form.setImageBytes(loadImage(form.getImageName()));
+                    list.add(form);
+                }
+        );
 
-            //form.setImageBytes(loadImage(form.getImageName()));
-            list.add(form);
-        }
         return list;
     }
 
-    @PostMapping(path = "activity")
-    public ModelAndView save(
-            @RequestParam("file") MultipartFile file,
-            @ModelAttribute(FORM_NAME) @Valid ActivityForm form,
-            HttpSession session,
-            BindingResult result){
-
-        boolean fileOk = false;
-
-        form.setImageName(file.getOriginalFilename());
+    @PostMapping(path = "activity/photo")
+    public void upload(@RequestParam(value = "file", required = false) MultipartFile file, HttpSession session){
 
         byte[] bytes = null;
         try {
             bytes = file.getBytes();
-            fileOk = true;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        session.setAttribute(ACTIVITY_IMAGE_FILENAME,file.getOriginalFilename());
+        session.setAttribute(ACTIVITY_IMAGE,bytes);
 
-        if(result.hasErrors() || !fileOk){
+    }
+
+    @PostMapping(path = "activity")
+    public ModelAndView save(
+            @ModelAttribute(FORM_NAME) @Valid ActivityForm form,
+            HttpSession session,
+            BindingResult result){
+
+
+        if(result.hasErrors()){
             form.setActivityTypeList(activityTypeService.getActivityTypes());
             return new ModelAndView("activity_form.html",FORM_NAME,form);
         }
         form.setPersonId(((Login)session.getAttribute(LoginController.USER_LOGIN_SESSION)).getPersonId());
+        if(session.getAttribute(ACTIVITY_IMAGE_FILENAME)!=null) {
+            form.setImageName(session.getAttribute(ACTIVITY_IMAGE_FILENAME).toString());
 
-
-        service.save(formToModel(form,bytes));
+            service.save(formToModel(form, (byte[]) session.getAttribute(ACTIVITY_IMAGE)));
+        }else{
+            service.save(formToModel(form,null));
+        }
         
 
         return new ModelAndView("redirect:/");
     }
 
     @PostMapping(path = "/activity/comment")
-    public String comment(PersonActivityCommentForm form, BindingResult result){
+    public String comment(PersonActivityCommentForm form, BindingResult result,HttpSession session){
         if(result.hasErrors()){
-            return "redirect:";
+            return "redirect:/activity/id/"+form.getActivityId();
         }
-        //TODO set personID
-        form.setPersonId(1);
+        Login l = (Login) session.getAttribute(LoginController.USER_LOGIN_SESSION);
+        form.setPersonId(l.getPersonId());
         commentService.save(form.toModel());
-        return "redirect:";
+        return "redirect:/activity/id/"+form.getActivityId();
     }
 
 
     private Activity formToModel(ActivityForm form, byte[] bytes) {
+
         Activity a = new Activity();
+        if(form.getId()!=null)
+            a = service.get(form.getId());
+
         a.setId(form.getId());
         a.setDescription(form.getDescription());
         a.setLocation(form.getLocation());
@@ -166,7 +203,11 @@ public class ActivityController {
         a.setActivityTypeId(form.getActivityTypeId());
         a.setName(form.getName());
         a.setPrice(form.getPrice());
+        //form.getDate().toInstant().atZone(ZoneId.systemDefault()).plusSeconds(1);
         a.setDate(form.getDate());
+
+        a.setStatus(form.getStatus());
+
         a.setImageId(form.getImageId());
 
         //Creating Image to put in database model
@@ -178,4 +219,32 @@ public class ActivityController {
     }
 
 
+    public List<ActivityForm> searchFullText(ActivitySearchForm form) {
+
+        List<Activity> activities = service.searchFullText(form);
+        List<ActivityForm> list = new ArrayList<>();
+        ImageService imageService = new  ImageService();
+        activities.stream().filter(x->x.getPersonId()==form.getPersonId()).forEach(
+                a->{
+                    if(a.getImageId()>0 && a.getImageId()!=null) {
+
+                        a.setImage(imageService.get(a.getImageId()));
+                        a.setImageId(a.getImage().getId());
+                    }
+                    ActivityForm f = new ActivityForm(a);
+                    f.setComments(commentService.getByActivity(a.getId()));
+                    f.setActivityTypeList(activityTypeService.getActivityTypes());
+                    f.setReactions(reactionService.getAllByActivity(a.getId()));
+                    f.setBadReaction((int) f.getReactions().stream().filter(x->x.getReaction().equals("N")).count());
+                    f.setMorelessReaction((int) f.getReactions().stream().filter(x->x.getReaction().equals("M")).count());
+                    f.setGoodReaction((int) f.getReactions().stream().filter(x->x.getReaction().equals("I")).count());
+
+
+                    //form.setImageBytes(loadImage(form.getImageName()));
+                    list.add(f);
+                }
+        );
+
+        return list;
+    }
 }

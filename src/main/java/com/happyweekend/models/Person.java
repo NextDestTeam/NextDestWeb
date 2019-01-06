@@ -6,16 +6,18 @@ import lombok.Setter;
 import java.util.Date;
 
 public class Person {
-	private Integer id = 0;
-	private String firstName = "";
-	private String lastName = "";
-	private String email = "";
-	private Date age = new Date();
-	private Integer personTypeId = 0;
-	private Login login = new Login();
+	private Integer id;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private Date age;
+	private Integer personTypeId;
+	private Login login;
 
 	@Getter@Setter
 	private Image image;
+	@Getter@Setter
+	private Integer imageId;
 	
 	public Integer getId() {
 		return id;
