@@ -7,10 +7,13 @@ import com.happyweekend.models.PersonActivityComment;
 import com.happyweekend.models.Reaction;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 
-import javax.validation.constraints.NotNull;
+
+import javax.validation.constraints.Size;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -21,26 +24,28 @@ public class ActivityForm {
 
     private Integer id;
     @NotEmpty
+    @Size(max = 500)
     private String name;
 
     private String character;
 
     @NotEmpty
+    @Size( max = 500)
     private String shortDescription;
+    @Size( max = 5000)
     private String description;
     @NotEmpty
+    @Size(max = 255)
     private String location;
     private Double price;
     private Integer personId;
-    @NotNull
+    @NonNull
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date date;
     //@NotNull(message = "{activity.type.null}")
     private ActivityType activityType;
-    @NotNull
+    @NonNull
     private int activityTypeId;
-
-
 
     private List<ActivityType> activityTypeList;
     private String imageName;

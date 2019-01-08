@@ -185,11 +185,12 @@
             <fieldset>
                 <div class="form-row form-group" >
                     <div class="input-group " th:with="err=${#fields.hasErrors('activityType')}">
-                        <label for="description" class="col-form-label">Activity status</label>
-                        <select class="form-control custom-select custom-select-lg " th:default="S" th:field="*{status}"  th:value="*{status}">
-                            <option  th:value="S" th:text="Sketch">Sketch</option>
-                            <option  th:value="P" th:text="Public">Public</option>
-                            <option  th:value="D" th:text="Hide">Hide</option>
+                        <label for="status" class="col-form-label">Activity status</label>
+                        <select class="form-control custom-select custom-select-lg " id="status" name="status"
+                                th:default="'S'" th:field="*{status}"  th:value="*{status}">
+                            <option  th:value="'S'" th:text="Sketch" th:selected="${activityForm.status=='S'}">Sketch</option>
+                            <option  th:value="'P'" th:text="Public" th:selected="${activityForm.status=='P'}">Public</option>
+                            <option  th:value="'D'" th:text="Hide" th:selected="${activityForm.status=='D'}">Hide</option>
                         </select>
                         <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{status}">Status Error</div>
                     </div>
@@ -230,7 +231,12 @@
                 <div class="form-row form-group" >
                     <div class="input-group " th:with="err=${#fields.hasErrors('description')}">
                         <label for="description" class="col-form-label">Activity description</label>
-                        <textarea class="form-control"  id="description" name="description" th:value="*{description}" placeholder="Please fill with more detailed information about the event" aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"></textarea>
+                        <textarea class="form-control"  id="description" name="description"
+                                  th:value="*{description}"
+                                  th:text="*{description}"
+                                  placeholder="Please fill with more detailed information about the event"
+                                  aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"
+                        ></textarea>
                         <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{description}">Activity Description Error</div>
                     </div>
                 </div>
@@ -262,7 +268,7 @@
                                 <div class="form-group">
                                     <div class='input-group date' id='datetimepicker1'>
                                         <label for="name" class=" col-form-label">Activity date</label>
-                                        <input type='datetime-local' id="date" name="date" th:value="*{date}" class="form-control" />
+                                        <input type='text' id="date" name="date" th:value="*{date}" class="form-control" />
                                         <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{date}">Date Error</div>
                                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
@@ -384,7 +390,7 @@
 
                     <div class="form-row form-group" >
                         <div class="input-group " th:with="err=${#fields.hasErrors('comment')}">
-                            <label for="description" class="col-form-label">Activity comments</label>
+                            <label for="comment" class="col-form-label">Activity comments</label>
                             <textarea class="form-control" th:value="*{comment}"  id="comment" name="comment" placeholder="Please let your comments" aria-label="With textarea" th:attrappend="class=${' '+(!err?'':'is-invalid')}"></textarea>
                             <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{comment}">Activity Description Error</div>
                         </div>

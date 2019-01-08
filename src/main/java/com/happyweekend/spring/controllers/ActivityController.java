@@ -152,9 +152,8 @@ public class ActivityController {
 
     @PostMapping(path = "activity")
     public ModelAndView save(
-            @ModelAttribute(FORM_NAME) @Valid ActivityForm form,
-            HttpSession session,
-            BindingResult result){
+            @ModelAttribute(FORM_NAME) @Valid ActivityForm form,BindingResult result,
+            HttpSession session){
 
 
         if(result.hasErrors()){

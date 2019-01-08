@@ -24,7 +24,7 @@ public class ActivityDao implements Dao<Activity>{
 
         ResultSet rs;
         String query = "SELECT id, name, short_description, description, location, price, person_id, \n" +
-                "       activity_type, date,image_id\n" +
+                "       activity_type, date,image_id,status\n" +
                 "  FROM activity\n" +
                 "  where name like '%"+
                 (activity.getName()==null?"":activity.getName())+
@@ -75,6 +75,7 @@ public class ActivityDao implements Dao<Activity>{
         activity.setActivityTypeId(rs.getInt("activity_type"));
         activity.setDate(rs.getTimestamp("date"));
         activity.setImageId(rs.getInt("image_id"));
+		activity.setStatus(rs.getString("status").charAt(0));
 
         return activity;
     }
@@ -138,18 +139,18 @@ public class ActivityDao implements Dao<Activity>{
 	public void update(Activity t) {
 		Statement stm;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String query = "UPDATE ACTIVITY SET"
-					 + "name='" + t.getName() + "', "
-					 + "short_description='" + t.getShortDescription() + "', "
-					 + "description='" + t.getDescription() + "', "
-					 + "location='" + t.getLocation() + "', "
-					 + "price='" + t.getPrice() + "', "
-					 + "person_id='" + t.getPersonId() +"',"
-                     + "activity_type='"+t.getActivityType().getId()+ "', "
-                     + "date = TIMESTAMP '"+sdf.format(t.getDate())+ "', "
-                     + "image_id = '"+t.getImageId()+ "', "
-				     + "status = "+"'"+t.getStatus()+"'"
-				     + "WHERE ID = "+t.getId();
+		String query = "UPDATE ACTIVITY SET "
+					 + " name='" + t.getName() + "', "
+					 + " short_description='" + t.getShortDescription() + "', "
+					 + " description='" + t.getDescription() + "', "
+					 + " location='" + t.getLocation() + "', "
+					 + " price='" + t.getPrice() + "', "
+					 + " person_id='" + t.getPersonId() +"',"
+                     + " activity_type='"+t.getActivityType().getId()+ "', "
+                     + " date = TIMESTAMP '"+sdf.format(t.getDate())+ "', "
+                     + " image_id = '"+t.getImageId()+ "', "
+				     + " status = "+"'"+t.getStatus()+"'"
+				     + " WHERE ID = "+t.getId();
 		try {
 			stm = this.connection.createStatement();
 			stm.executeUpdate(query);
@@ -175,7 +176,7 @@ public class ActivityDao implements Dao<Activity>{
 
 		ResultSet rs;
 		String query = "SELECT id, name, short_description, description, location, price, person_id, \n" +
-				"       activity_type, date,image_id\n" +
+				"       activity_type, date,image_id,status\n" +
 				"  FROM activity\n" +
 				"  where name like '%"+
 				(form.getName()==null?"":form.getName())+
@@ -213,7 +214,7 @@ public class ActivityDao implements Dao<Activity>{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		ResultSet rs;
 		String query = "SELECT id, name, short_description, description, location, price, person_id, \n" +
-				"       activity_type, date,image_id\n" +
+				"       activity_type, date,image_id,status\n" +
 				"  FROM activity\n" +
 				"  where "+
 				" date>= '"+sdf.format(new java.util.Date())+"'::date "+
