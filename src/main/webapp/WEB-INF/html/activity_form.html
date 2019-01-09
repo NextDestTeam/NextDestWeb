@@ -31,14 +31,17 @@
                     integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
                     crossorigin="anonymous"></script>-->
     <script th:src="@{/webjars/popper.js/1.14.4/popper.min.js}"></script>
+    <script th:src="@{/webjars/momentjs/2.22.2/moment.js}"></script>
             <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js" ></script>-->
     <script
             th:src="@{/webjars/smalot-bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.js}"></script>
 
     <!--<link rel="stylesheet" href="/webapp/resources/css/activity_form.css" />-->
     <link rel="stylesheet"  th:href="@{/resources/css/activity_form.css}"/>
+    <link rel="shortcut icon" th:href="@{/resources/images/logo.png}" type="image/x-icon">
 
-
+    <script
+            th:src="@{/resources/js/utils.js}"></script>
 
 
     <script>
@@ -57,6 +60,7 @@
             });
             geocoder = new google.maps.Geocoder();
 
+            updateLocation();
 
         }
 
@@ -97,7 +101,8 @@
         function updateLocation(){
             var loc = document.getElementById("location");
             address = loc.value;
-            codeAddress(geocoder, map);
+            if(address!='' && address!=null)
+                codeAddress(geocoder, map);
         }
 
         /*Photo functions*/
@@ -267,7 +272,7 @@
                             <div class=''>
                                 <div class="form-group">
                                     <div class='input-group date' id='datetimepicker1'>
-                                        <label for="name" class=" col-form-label">Activity date</label>
+                                        <label for="date" class=" col-form-label">Activity date</label>
                                         <input type='text' id="date" name="date" th:value="*{date}" class="form-control" />
                                         <div th:if="${err}" class="" th:attrappend="class=' invalid-feedback'" th:errors="*{date}">Date Error</div>
                                         <span class="input-group-addon">

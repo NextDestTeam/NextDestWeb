@@ -1,9 +1,6 @@
 package com.happyweekend.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +18,12 @@ public class PersonDao implements Dao<Person> {
 	public Person get(Integer id) {
 		Person person = new Person();
 		ResultSet rs;
-		String query = "SELECT * FROM PERSON WHERE ID='" + id + "'";
-		Statement stm;
+		String query = "SELECT * FROM PERSON WHERE ID = ?";
+		PreparedStatement stm;
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,id);
+			rs = stm.executeQuery();
 			rs.next();
 			person.setAge(rs.getDate("age"));
 			person.setEmail(rs.getString("email"));
@@ -68,22 +66,25 @@ public class PersonDao implements Dao<Person> {
 
 	@Override
 	public void save(Person t) {
-		Statement stm;
+		PreparedStatement stm;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String date = String.format("%s",t.getAge()==null?"null":
 				" TIMESTAMP '"+sdf.format(t.getAge())+"'");
 
 		String query = "INSERT INTO PERSON(id, first_name, last_name, email, age, person_type_id, IMAGE_ID)"
-					 + "values(default, '"
-					 + t.getFirstName() + "', '"
-					 + t.getLastName() + "', '"
-					 + t.getEmail() + "', "
-					 + date+ ", '"
-					 + t.getPersonTypeId() +"', "
-					+ (t.getImageId()==null?null:+t.getImageId())+")";
+					 + "values(default, ?,?,?,?,?,?)";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+			stm = this.connection.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+			stm.setString(1,t.getFirstName());
+			stm.setString(2, t.getLastName());
+			stm.setString(3, t.getEmail());
+			if(t.getAge()!=null)
+				stm.setDate(4, new java.sql.Date(t.getAge().getTime()));
+			else
+				stm.setDate(4, null);
+			stm.setInt(5, t.getPersonTypeId());
+			stm.setInt(6,+ (t.getImageId()==null?null:+t.getImageId()));
+			stm.executeUpdate();
 			if(stm.getGeneratedKeys().next()) {
 				t.setId(stm.getGeneratedKeys().getInt(1));
 			}
@@ -94,19 +95,29 @@ public class PersonDao implements Dao<Person> {
 
 	@Override
 	public void update(Person t) {
-		Statement stm;
+		PreparedStatement stm;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String query = "UPDATE PERSON SET "
-				 + "first_name='" + t.getFirstName() + "', "
-				 + "last_name='" + t.getLastName() + "', "
-				 + "email='" + t.getEmail() + "', "
-				 + "age='" + sdf.format(t.getAge()) + "', "
-				 + "person_type_id='" + t.getPersonTypeId() +"', "
-				+ " image_id="+t.getImageId()
-				+ " WHERE id = "+ t.getId();
+				 + "first_name=?, "
+				 + "last_name=?, "
+				 + "email=?, "
+				 + "age=?, "
+				 + "person_type_id=?, "
+				+ " image_id=?"
+				+ " WHERE id = ?";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+				stm.setString(1,t.getFirstName());
+				stm.setString(2, t.getLastName());
+				stm.setString(3, t.getEmail());
+				if(t.getAge()!=null)
+					stm.setDate(4, new java.sql.Date(t.getAge().getTime()));
+				else
+					stm.setDate(4,null);
+				stm.setInt(5,t.getPersonTypeId());
+				stm.setInt(6,t.getImageId());
+				stm.setInt(7, t.getId());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
@@ -114,12 +125,12 @@ public class PersonDao implements Dao<Person> {
 
 	@Override
 	public void delete(Person t) {
-		Statement stm;
+		PreparedStatement stm;
 		String query = "delete from person "
-					 + "where id='" + t.getId() + "'";	
+					 + "where id=?";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		

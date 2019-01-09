@@ -1,9 +1,6 @@
 package com.happyweekend.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +17,13 @@ public class LoginDao implements Dao<Login> {
 
 	public Login get(Login login) {
 		ResultSet rs;
-		String query = "SELECT * FROM LOGIN WHERE login_name LIKE'" + login.getLoginName() + "'"+
-				" AND PASSWORD LIKE '"+login.getPassword() +"'";
-		Statement stm;
+		String query = "SELECT * FROM LOGIN WHERE login_name LIKE ? AND PASSWORD LIKE ?";
+		PreparedStatement stm;
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1,login.getLoginName());
+			stm.setString(2,login.getPassword());
+			rs = stm.executeQuery();
 			while(rs.next()) {
 				login.setId(rs.getInt("id"));
 				login.setLoginName(rs.getString("login_name"));
@@ -43,11 +41,12 @@ public class LoginDao implements Dao<Login> {
 	public Login get(Integer id) {
 		Login login = new Login();
 		ResultSet rs;
-		String query = "SELECT * FROM LOGIN WHERE ID='" + id + "'";
-		Statement stm;
+		String query = "SELECT * FROM LOGIN WHERE ID = ?";
+		PreparedStatement stm;
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,id);
+			rs = stm.executeQuery();
 			rs.next();
 			login.setId(rs.getInt("id"));
 			login.setLoginName(rs.getString("login_name"));
@@ -84,14 +83,15 @@ public class LoginDao implements Dao<Login> {
 
 	@Override
 	public void save(Login t) {
-		Statement stm;
+		PreparedStatement stm;
 		String query = "INSERT INTO login(id,person_id, login_name, password)"
-					 + "values(default,"+t.getPersonId()+", '"
-					 + t.getLoginName() + "', '"
-					 + t.getPassword() + "')";
+					 + "values(default,?,?,?)";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,t.getPersonId());
+			stm.setString(2, t.getLoginName());
+			stm.setString(3,t.getPassword());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
@@ -99,14 +99,16 @@ public class LoginDao implements Dao<Login> {
 
 	@Override
 	public void update(Login t) {
-		Statement stm;
+		PreparedStatement stm;
 		String query = "UPDATE LOGIN SET "
-					 + "login_name='" + t.getLoginName() + "', "
-					 + "password='" + t.getPassword() + "'"+
+					 + "login_name=?, "
+					 + "password=?"+
 				" WHERE id = "+t.getId();
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1,t.getLoginName());
+			stm.setString(2,t.getPassword());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

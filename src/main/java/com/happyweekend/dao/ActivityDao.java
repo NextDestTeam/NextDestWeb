@@ -30,11 +30,14 @@ public class ActivityDao implements Dao<Activity>{
                 (activity.getName()==null?"":activity.getName())+
                 "%' and short_description like '%"+
                 (activity.getShortDescription() == null?"":activity.getShortDescription())+"%'";
-        Statement stm;
+        PreparedStatement stm;
         List<Activity> result = new ArrayList<>();
         try {
-            stm = this.connection.createStatement();
-            rs = stm.executeQuery(query);
+            stm = this.connection.prepareStatement(query);
+			stm.setString(1,activity.getName());
+			stm.setString(2,activity.getShortDescription());
+
+            rs = stm.executeQuery();
             while(rs.next()) {
                 activity = toModel(rs);
                 result.add(activity);
@@ -49,11 +52,12 @@ public class ActivityDao implements Dao<Activity>{
 	public Activity get(Integer id) {
 		Activity activity = new Activity();
 		ResultSet rs;
-		String query = "SELECT * FROM ACTIVITY WHERE ID='" + id + "'";
-		Statement stm;
+		String query = "SELECT * FROM ACTIVITY WHERE ID=?";
+		PreparedStatement stm;
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,id);
+			rs = stm.executeQuery();
 			rs.next();
             activity = toModel(rs);
 		} catch (SQLException e) {
@@ -86,11 +90,12 @@ public class ActivityDao implements Dao<Activity>{
 		List<Activity> activities = new ArrayList<>();
 		ResultSet rs;
 		String query = "SELECT * FROM ACTIVITY WHERE "+
-				" date>= '"+sdf.format(new java.util.Date())+"'::date ORDER BY date asc";
-		Statement stm;
+				" date>= ? ORDER BY date asc";
+		PreparedStatement stm;
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setDate(1,new Date(new java.util.Date().getTime()));
+			rs = stm.executeQuery();
 			while(rs.next()) {
 				Activity activity = new Activity();
 				activity.setId(rs.getInt("id"));
@@ -114,22 +119,23 @@ public class ActivityDao implements Dao<Activity>{
 
 	@Override
 	public void save(Activity t) {
-		Statement stm;
+		PreparedStatement stm;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		String query = "INSERT INTO ACTIVITY(id, name, short_description, description, location, price, person_id,activity_type,date,image_id)"
-					 + "values(default, '"
-					 + t.getName() + "', '"
-					 + t.getShortDescription() + "', '"
-					 + t.getDescription() + "', '"
-					 + t.getLocation() + "', '"
-					 + t.getPrice() + "', '"
-					 + t.getPersonId() + "', '"
-					 + t.getActivityTypeId()+"',"
-                     + String.format("TIMESTAMP '%s'",sdf.format(t.getDate()))+", "
-					+ (t.getImageId() == null?null:t.getImageId() )+")";
+		String query = "INSERT INTO ACTIVITY(id, name, short_description, description, location, price, person_id,activity_type,date,image_id,status)"
+					 + "values(default, ?,?,?,?,?,?,?,?,?,?)";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, t.getName());
+			stm.setString(2,t.getShortDescription());
+			stm.setString(3, t.getDescription());
+			stm.setString(4, t.getLocation());
+			stm.setDouble(5, t.getPrice());
+			stm.setInt(6,t.getPersonId());
+			stm.setInt(7, t.getActivityTypeId());
+			stm.setTimestamp(8,new Timestamp(t.getDate().getTime()));
+			stm.setInt(9,t.getImageId());
+			stm.setString(10,""+t.getStatus());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
@@ -137,23 +143,34 @@ public class ActivityDao implements Dao<Activity>{
 
 	@Override
 	public void update(Activity t) {
-		Statement stm;
+		PreparedStatement stm;
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String query = "UPDATE ACTIVITY SET "
-					 + " name='" + t.getName() + "', "
-					 + " short_description='" + t.getShortDescription() + "', "
-					 + " description='" + t.getDescription() + "', "
-					 + " location='" + t.getLocation() + "', "
-					 + " price='" + t.getPrice() + "', "
-					 + " person_id='" + t.getPersonId() +"',"
-                     + " activity_type='"+t.getActivityType().getId()+ "', "
-                     + " date = TIMESTAMP '"+sdf.format(t.getDate())+ "', "
-                     + " image_id = '"+t.getImageId()+ "', "
-				     + " status = "+"'"+t.getStatus()+"'"
-				     + " WHERE ID = "+t.getId();
+					 + " name=?, "
+					 + " short_description=?, "
+					 + " description=?, "
+					 + " location=?, "
+					 + " price=?, "
+					 + " person_id=?,"
+                     + " activity_type=?, "
+                     + " date = ?, "
+                     + " image_id = ?, "
+				     + " status = ? "
+				     + " WHERE ID = ?";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1, t.getName());
+			stm.setString(2,t.getShortDescription());
+			stm.setString(3, t.getDescription());
+			stm.setString(4, t.getLocation());
+			stm.setDouble(5,t.getPrice());
+			stm.setInt(6, t.getPersonId());
+			stm.setInt(7,t.getActivityType().getId());
+			stm.setTimestamp(8,new Timestamp(t.getDate().getTime()));
+			stm.setInt(9,t.getImageId());
+			stm.setString(10,""+t.getStatus());
+			stm.setInt(11,t.getId());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}				
@@ -161,12 +178,13 @@ public class ActivityDao implements Dao<Activity>{
 
 	@Override
 	public void delete(Activity t) {
-		Statement stm;
+		PreparedStatement stm;
 		String query = "delete from activity "
-					 + "where id='" + t.getId() + "'";	
+					 + "where id=?";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,t.getId());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
@@ -178,27 +196,38 @@ public class ActivityDao implements Dao<Activity>{
 		String query = "SELECT id, name, short_description, description, location, price, person_id, \n" +
 				"       activity_type, date,image_id,status\n" +
 				"  FROM activity\n" +
-				"  where name like '%"+
-				(form.getName()==null?"":form.getName())+
-				"%' and short_description like '%"+
-				(form.getShortDescription() == null?"":form.getShortDescription())+"%'"+
-				" and description like '%"+(form.getDescription()==null?"":form.getDescription())+"%'"+
-				" and location like '%"+(form.getLocation()==null?"":form.getLocation())+"%'"+
-				" and person_id = "+(form.getPersonId());
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				"  where name like ? and short_description like ?"+
+				" and description like ?"+
+				" and location like ?"+
+				" and person_id = ?";
+
 		if(form.getIniDate()!=null) {
 			java.util.Date d = Date.from(form.getIniDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-			query+=" and date >= '" + sdf.format(d) + "'::date";
+			query+=" and date >= ?";
 		}
 		if(form.getEndDate()!=null) {
 			java.util.Date d = Date.from(form.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-			query+=" and date <= '" + sdf.format(d) + "'::date";
+			query+=" and date <= ?";
 		}
-		Statement stm;
+		PreparedStatement stm;
 		List<Activity> result = new ArrayList<>();
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1,"%"+(form.getName()==null?"":form.getName())+"%");
+			stm.setString(2,"%"+(form.getShortDescription() == null?"":form.getShortDescription())+"%");
+			stm.setString(3,"%"+(form.getDescription()==null?"":form.getDescription())+"%");
+			stm.setString(4,"%"+(form.getLocation()==null?"":form.getLocation())+"%");
+			stm.setInt(5,(form.getPersonId()));
+
+			int ind = 6;
+			if(form.getIniDate()!=null) {
+				stm.setDate(ind++,  java.sql.Date.valueOf(form.getIniDate()));
+			}
+			if(form.getEndDate()!=null) {
+				stm.setDate(ind++,  java.sql.Date.valueOf(form.getEndDate()));
+			}
+
+			rs = stm.executeQuery();
 			while(rs.next()) {
 				Activity activity = toModel(rs);
 				result.add(activity);
@@ -217,29 +246,27 @@ public class ActivityDao implements Dao<Activity>{
 				"       activity_type, date,image_id,status\n" +
 				"  FROM activity\n" +
 				"  where "+
-				" date>= '"+sdf.format(new java.util.Date())+"'::date "+
-				"  and (name like '%"+
-				(form.getName()==null?"":form.getName())+
-				"%' or short_description like '%"+
-				(form.getName() == null?"":form.getName())+"%'"+
-				" or description like '%"+(form.getName()==null?"":form.getName())+"%'"+
-				" or location like '%"+(form.getName()==null?"":form.getName())+"%'"+
-				" and person_id = "+(form.getPersonId());
+				" date>= ? "+
+				"  and (name like ? or short_description like ?"+
+				" or description like ?"+
+				" or location like ?"+
+				" and person_id = ?";
 
-		if(form.getIniDate()!=null) {
-			java.util.Date d = Date.from(form.getIniDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-			query+=" and date >= '" + sdf.format(d) + "'::date";
-		}
-		if(form.getEndDate()!=null) {
-			java.util.Date d = Date.from(form.getEndDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
-			query+=" and date <= '" + sdf.format(d) + "'::date";
-		}
+
 		query+=") order by date asc";
-		Statement stm;
+		PreparedStatement stm;
 		List<Activity> result = new ArrayList<>();
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setDate(1,  new Date(new java.util.Date().getTime()));
+			stm.setString(2,"%"+(form.getName()==null?"":form.getName())+"%");
+			stm.setString(3,"%"+(form.getName()==null?"":form.getName())+"%");
+			stm.setString(4,"%"+(form.getName()==null?"":form.getName())+"%");
+			stm.setString(5,"%"+(form.getName()==null?"":form.getName())+"%");
+			stm.setInt(6,(form.getPersonId()));
+
+
+			rs = stm.executeQuery();
 			while(rs.next()) {
 				Activity activity = toModel(rs);
 				result.add(activity);

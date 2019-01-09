@@ -1,9 +1,6 @@
 package com.happyweekend.dao;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +17,12 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 	public ActivityType get(Integer id) {
 		ActivityType activityType = new ActivityType();
 		ResultSet rs;
-		String query = "SELECT * FROM ACTIVITY_TYPE WHERE ID='" + id + "'";
-		Statement stm;
+		String query = "SELECT * FROM ACTIVITY_TYPE WHERE ID=?";
+		PreparedStatement stm;
 		try {
-			stm = this.connection.createStatement();
-			rs = stm.executeQuery(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,id);
+			rs = stm.executeQuery();
 			rs.next();
 			activityType.setId(rs.getInt("id"));
 			activityType.setName(rs.getString("name"));
@@ -58,13 +56,13 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 
 	@Override
 	public void save(ActivityType t) {
-		Statement stm;
+		PreparedStatement stm;
 		String query = "INSERT INTO ACTIVITY_TYPE(id, name)"
-					 + "values(default, '"
-					 + t.getName() + "')";
+					 + "values(default, ?)";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setString(1,t.getName());
+			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}		
@@ -72,7 +70,7 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 
 	@Override
 	public void update(ActivityType t) {
-		Statement stm;
+		/*Statement stm;
 		String query = "UPDATE ACTIVITY_TYPE SET("
 					 + "id='" + t.getId() + "', "
 					 + "name='" + t.getName() + "')";
@@ -81,19 +79,20 @@ public class ActivityTypeDao implements Dao<ActivityType> {
 			stm.executeUpdate(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}				
+		}*/
 	}
 
 	@Override
 	public void delete(ActivityType t) {
-		Statement stm;
+		PreparedStatement stm;
 		String query = "delete from activity_type "
-					 + "where id='" + t.getId() + "'";	
+					 + "where id=?";
 		try {
-			stm = this.connection.createStatement();
-			stm.executeUpdate(query);
+			stm = this.connection.prepareStatement(query);
+			stm.setInt(1,t.getId());
+			stm.executeUpdate();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}		
 	}
