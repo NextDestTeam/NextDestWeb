@@ -46,7 +46,7 @@ public class PersonAdapter {
 
         personForm.setPersonTypeList(personTypeList);
         if(image!=null)
-            personForm.setPhoto("data:image/png;base64, "+ Base64.getEncoder().encodeToString(image.getImage()));
+            personForm.setPhoto("data:image/jpeg;charset=utf-8;base64, "+ Base64.getEncoder().encodeToString(image.getImage()));
 
         return personForm;
     }

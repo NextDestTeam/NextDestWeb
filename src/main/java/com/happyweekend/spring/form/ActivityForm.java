@@ -78,7 +78,7 @@ public class ActivityForm {
         this.location = activity.getLocation();
         this.price = activity.getPrice();
         if(activity.getImage()!=null)
-            this.imageBytes = "data:image/png;base64, "+Base64.getEncoder().encodeToString(activity.getImage().getImage());
+            this.imageBytes = "data:image/jpeg;charset=utf-8;base64, "+Base64.getEncoder().encodeToString(activity.getImage().getImage());
         this.status = activity.getStatus();
     }
 

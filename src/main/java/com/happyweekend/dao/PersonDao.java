@@ -83,7 +83,7 @@ public class PersonDao implements Dao<Person> {
 			else
 				stm.setDate(4, null);
 			stm.setInt(5, t.getPersonTypeId());
-			stm.setInt(6,+ (t.getImageId()==null?null:+t.getImageId()));
+			stm.setObject(6, t.getImageId());
 			stm.executeUpdate();
 			if(stm.getGeneratedKeys().next()) {
 				t.setId(stm.getGeneratedKeys().getInt(1));

@@ -1,9 +1,8 @@
 package com.happyweekend.spring.controllers;
 
-import com.happyweekend.models.Activity;
+import com.happyweekend.enumarator.PersonTypeEnum;
+import com.happyweekend.models.*;
 import com.happyweekend.models.Image;
-import com.happyweekend.models.Login;
-import com.happyweekend.models.Person;
 import com.happyweekend.service.*;
 import com.happyweekend.spring.form.ActivityForm;
 import com.happyweekend.spring.form.ActivitySearchForm;
@@ -15,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.ZoneId;
 import java.time.temporal.TemporalUnit;
@@ -111,7 +113,7 @@ public class ActivityController {
         List<Activity> activities = service.getActivities();
         List<ActivityForm> list = new ArrayList<>();
         ImageService imageService = new  ImageService();
-        activities.stream().filter(x->x.getPersonId()==p.getId()).forEach(
+        activities.stream().filter(x->x.getPersonId()==p.getId() || p.getPersonTypeId() == PersonTypeEnum.ADM.getValue()).forEach(
                 a->{
                     if(a.getImageId()>0 && a.getImageId()!=null) {
 
@@ -140,14 +142,40 @@ public class ActivityController {
 
         byte[] bytes = null;
         try {
-            bytes = file.getBytes();
+            //bytes = file.getBytes();
 
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            int type = image.getType() == 0? BufferedImage.TYPE_INT_ARGB : image.getType();
+            image = resizeImageWithHint(image,type);
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            ImageIO.write(image,"jpg",outputStream);
+            outputStream.flush();
+            bytes = outputStream.toByteArray();
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         session.setAttribute(ACTIVITY_IMAGE_FILENAME,file.getOriginalFilename());
         session.setAttribute(ACTIVITY_IMAGE,bytes);
 
+    }
+
+    private BufferedImage resizeImageWithHint(BufferedImage originalImage, int type){
+
+        BufferedImage resizedImage = new BufferedImage(640, 380, type);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, 640, 380, null);
+        g.dispose();
+        g.setComposite(AlphaComposite.Src);
+
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+        return resizedImage;
     }
 
     @PostMapping(path = "activity")
